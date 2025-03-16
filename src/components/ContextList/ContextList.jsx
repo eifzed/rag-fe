@@ -25,6 +25,11 @@ const ContextList = () => {
     setSearchTerm(term);
   };
 
+//   const handleDeleteContext = (deletedId) => {
+//     // Update your contexts list state by filtering out the deleted context
+//     setContexts(prevContexts => prevContexts.filter(ctx => ctx.id !== deletedId));
+//   };
+
   const handleCreateContext = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -71,7 +76,7 @@ const ContextList = () => {
       ) : (
         <div className="mt-6">
           {contexts.map(context => (
-            <ContextItem key={context.id} context={context} />
+            <ContextItem key={context.id} context={context} onDelete={fetchContexts} />
           ))}
         </div>
       )}

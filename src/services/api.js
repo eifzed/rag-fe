@@ -53,7 +53,7 @@ export const uploadDocumentToContext = async (contextId, file) => {
     const formData = new FormData();
     formData.append('files', file);
     
-    const response = await api.post(`/contexts/${contextId}/file`, formData);
+    const response = await api.post(`/contexts/${contextId}/documents`, formData);
     return response.data;
   } catch (error) {
     console.error(`Error uploading document to context ${contextId}:`, error);
@@ -63,7 +63,7 @@ export const uploadDocumentToContext = async (contextId, file) => {
 
 export const deleteDocumentFromContext = async (contextId, fileId) => {
   try {
-    await api.delete(`/contexts/${contextId}/file/${fileId}`);
+    await api.delete(`/contexts/${contextId}/documents/${fileId}`);
     return true;
   } catch (error) {
     console.error(`Error deleting document ${fileId} from context ${contextId}:`, error);

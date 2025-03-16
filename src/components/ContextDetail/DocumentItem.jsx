@@ -10,7 +10,7 @@ const DocumentItem = ({ document, onDelete }) => {
           </svg>
         </div>
         <div>
-          <h4 className="font-medium text-gray-800">{document.name}</h4>
+          <h4 className="font-medium text-gray-800">{document.filename}</h4>
         </div>
       </div>
       <div className="flex space-x-2">
