@@ -1,5 +1,5 @@
 // src/hooks/useChat.js
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { sendChatMessage } from '../services/api';
 
 export const useChat = (initialContextId = null) => {
@@ -8,6 +8,52 @@ export const useChat = (initialContextId = null) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [sources, setSources] = useState([]);
+
+  // Function to generate a cache key for the current context
+  const getCacheKey = useCallback((ctxId) => {
+    return `chat_history_${ctxId || 'no_context'}`;
+  }, []);
+  
+  // Load messages from cache when context changes
+  useEffect(() => {
+    if (contextId) {
+      // Clear current messages immediately to prevent showing previous context messages
+      setMessages([]);
+      setSources([]);
+      
+      // Then load from cache if available
+      const cachedData = localStorage.getItem(getCacheKey(contextId));
+      if (cachedData) {
+        try {
+          const { messages: cachedMessages, sources: cachedSources } = JSON.parse(cachedData);
+          if (cachedMessages && cachedMessages.length > 0) {
+            setMessages(cachedMessages);
+          }
+          if (cachedSources) {
+            setSources(cachedSources);
+          }
+        } catch (e) {
+          console.error("Failed to parse cached chat data:", e);
+        }
+      }
+    } else {
+      // No context selected, clear messages
+      setMessages([]);
+      setSources([]);
+    }
+  }, [contextId, getCacheKey]);
+  
+  // Save to cache whenever messages or sources change
+  useEffect(() => {
+    if (contextId && messages.length > 0) {
+      const dataToCache = {
+        messages,
+        sources,
+        lastUpdated: new Date().toISOString()
+      };
+      localStorage.setItem(getCacheKey(contextId), JSON.stringify(dataToCache));
+    }
+  }, [messages, sources, contextId, getCacheKey]);
 
   const sendMessage = useCallback(async (content) => {
     if (!contextId) {
@@ -55,12 +101,33 @@ export const useChat = (initialContextId = null) => {
     setMessages([]);
     setSources([]);
     setError(null);
-  }, []);
+    
+    // Clear cache for this context
+    if (contextId) {
+      localStorage.removeItem(getCacheKey(contextId));
+    }
+  }, [contextId, getCacheKey]);
 
   const selectContext = useCallback((id) => {
-    setContextId(id);
-    resetChat();
-  }, [resetChat]);
+    // Only update if different to prevent unnecessary re-renders
+    if (id !== contextId) {
+      setContextId(id);
+      setError(null);
+      // Don't need to clear messages here as the useEffect will handle it
+    }
+  }, [contextId]);
+
+  // For debugging purposes
+  const clearAllChatCache = useCallback(() => {
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      if (key.startsWith('chat_history_')) {
+        localStorage.removeItem(key);
+      }
+    });
+    setMessages([]);
+    setSources([]);
+  }, []);
 
   return {
     messages,
@@ -70,6 +137,7 @@ export const useChat = (initialContextId = null) => {
     contextId,
     sendMessage,
     selectContext,
-    resetChat
+    resetChat,
+    clearAllChatCache
   };
 };

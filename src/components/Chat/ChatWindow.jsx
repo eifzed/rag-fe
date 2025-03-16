@@ -24,15 +24,22 @@ const ChatWindow = ({ initialContextId }) => {
     contextId,
     sendMessage,
     selectContext,
-    resetChat
+    resetChat,
+    clearAllChatCache
   } = useChat(initialContextId);
   
   const needsContextSelection = !contextId;
 
-  // Sync URL with context ID when initialized with initialContextId prop
+  // Sync URL with context ID when initialized with initialContextId prop or from URL params
   useEffect(() => {
-    if (initialContextId && initialContextId !== getContextIdFromUrl()) {
+    const urlContextId = getContextIdFromUrl();
+    
+    if (initialContextId && initialContextId !== urlContextId) {
+      // If prop is provided, it takes precedence
       updateUrlWithContextId(initialContextId);
+    } else if (urlContextId && !contextId) {
+      // If URL has context ID but hook doesn't, sync hook with URL
+      selectContext(urlContextId);
     }
   }, [initialContextId]);
 
