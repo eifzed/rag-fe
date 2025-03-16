@@ -24,7 +24,11 @@ const router = createBrowserRouter([
         element: <ContextDetailPage />
       },
       {
-        path: 'chat',
+        path: 'chat/:contextId',
+        element: <ChatPage />
+      },
+      {
+        path: 'chat/',
         element: <ChatPage />
       }
     ]

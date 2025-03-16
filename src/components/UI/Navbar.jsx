@@ -1,6 +1,7 @@
 // src/components/UI/Navbar.jsx
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import logoSvg from '../../assets/logo.svg';
 
 const Navbar = () => {
   const location = useLocation();
@@ -14,7 +15,9 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <Link to="/" className="font-bold text-xl">RAG LLM App</Link>
+            <Link to="/" className="flex items-center">
+              <img src={logoSvg} alt="Logo" className="h-8 w-auto" />
+            </Link>
           </div>
           <div className="flex space-x-4">
             <Link
