@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MessageList from './MessageList';
 import MessageInput from './MessageInput';
@@ -29,6 +29,7 @@ const ChatWindow = ({ initialContextId }) => {
   } = useChat(initialContextId);
   
   const needsContextSelection = !contextId;
+  const inputRef = useRef(null);
 
   // Sync URL with context ID when initialized with initialContextId prop or from URL params
   useEffect(() => {
@@ -56,6 +57,14 @@ const ChatWindow = ({ initialContextId }) => {
       setContextDetails({ name: '', description: '' });
     }
   }, [contextId]);
+
+  // Focus input when loading state changes from true to false
+  useEffect(() => {
+    if (!loading && messages.length > 0 && inputRef.current) {
+      // Focus the input after receiving a response
+      inputRef.current.focus();
+    }
+  }, [loading, messages]);
 
   // Fetch context details from API
   const fetchContextDetails = async (id) => {
@@ -107,6 +116,11 @@ const ChatWindow = ({ initialContextId }) => {
     // Optionally keep the context in URL when resetting chat
     // If you want to clear context on reset, uncomment:
     // updateUrlWithContextId(null);
+    
+    // Focus on input after reset
+    if (inputRef.current) {
+      setTimeout(() => inputRef.current.focus(), 0);
+    }
   };
 
   // Toggle sidebar visibility
@@ -143,6 +157,7 @@ const ChatWindow = ({ initialContextId }) => {
           onSendMessage={sendMessage}
           isLoading={loading}
           disabled={needsContextSelection}
+          ref={inputRef}
         />
       </div>
     </div>

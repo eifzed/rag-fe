@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import Button from '../UI/Button';
 
-const MessageInput = ({ onSendMessage, isLoading, disabled }) => {
+const MessageInput = forwardRef(({ onSendMessage, isLoading, disabled }, ref) => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = (e) => {
@@ -25,6 +25,7 @@ const MessageInput = ({ onSendMessage, isLoading, disabled }) => {
     <form onSubmit={handleSubmit} className="border-t p-4">
       <div className="flex">
         <textarea
+          ref={ref}
           className="flex-1 border rounded-l-lg px-4 py-3 min-h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
           placeholder="Type your message..."
           value={message}
@@ -47,6 +48,6 @@ const MessageInput = ({ onSendMessage, isLoading, disabled }) => {
       </div>
     </form>
   );
-};
+});
 
 export default MessageInput;
