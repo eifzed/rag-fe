@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = 'https://rag-production-08bc.up.railway.app/api';
 
 // Create axios instance
 const api = axios.create({
