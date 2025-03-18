@@ -1,13 +1,21 @@
 // src/components/UI/Navbar.jsx
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logoSvg from '../../assets/logo.svg';
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   
   const isActive = (path) => {
     return location.pathname === path;
+  };
+  
+  const handleLogout = () => {
+    console.log("removing token from localstorage in navbar")
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
   };
   
   return (
@@ -19,7 +27,7 @@ const Navbar = () => {
               <img src={logoSvg} alt="Logo" className="h-8 w-auto" />
             </Link>
           </div>
-          <div className="flex space-x-4">
+          <div className="flex items-center space-x-4">
             <Link
               to="/contexts"
               className={`px-3 py-2 rounded-md text-sm font-medium ${
@@ -40,6 +48,12 @@ const Navbar = () => {
             >
               Chat
             </Link>
+            <button
+              onClick={handleLogout}
+              className="ml-4 px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </div>
