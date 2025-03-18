@@ -97,11 +97,12 @@ export const sendChatMessage = async (contextId, message, history = []) => {
   }
 };
 
-export const signup = async (email, password) => {
+export const signup = async (email, password, avatar_url) => {
   try {
     const response = await api.post('/auth/signup', {
       email,
       password,
+      avatar_url,
     });
     return response;
   } catch (error) {

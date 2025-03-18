@@ -13,6 +13,12 @@ const SignupPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const generateAvatarUrl = (email) => {
+    // Using robohash.org to generate robot/monster avatars
+    // Set size to 200x200 pixels and use 'set=set2' for monsters (or 'set=set1' for robots)
+    return `https://robohash.org/${encodeURIComponent(email)}?set=set2&size=200x200`;
+  };
+
   const validatePassword = () => {
     if (password.length < 8) {
       setError('Password must be at least 8 characters long');
@@ -36,8 +42,10 @@ const SignupPage = () => {
     setIsLoading(true);
     
     try {
+      const avatarUrl = generateAvatarUrl(email);
+      
       // First create account and get token
-      const signupResponse = await signup(email, password);
+      const signupResponse = await signup(email, password, avatarUrl);
       localStorage.setItem('token', signupResponse.data.access_token);
       
       // Then fetch user details

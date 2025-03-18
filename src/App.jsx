@@ -11,7 +11,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const currentPath = window.location.pathname;
-  const isPublicRoute = currentPath === '/login' || currentPath === '/signup';
+  const isPublicRoute = currentPath === '/login' || currentPath === '/signup' || currentPath === '/';
 
   // Verify token with backend on load
   useEffect(() => {
