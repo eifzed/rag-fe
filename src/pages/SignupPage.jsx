@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useOutletContext } from 'react-router-dom';
-import axios from 'axios';
+import { getUserProfile } from '../services/api';
 
 import { signup } from '../services/api';
 
@@ -36,10 +36,14 @@ const SignupPage = () => {
     setIsLoading(true);
     
     try {
-      const response = await signup(email, password);
+      // First create account and get token
+      const signupResponse = await signup(email, password);
+      localStorage.setItem('token', signupResponse.data.access_token);
       
-      localStorage.setItem('token', response.data.access_token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      // Then fetch user details
+      const userResponse = await getUserProfile();
+      localStorage.setItem('user', JSON.stringify(userResponse.data));
+      
       setIsAuthenticated(true);
       navigate('/contexts');
     } catch (err) {

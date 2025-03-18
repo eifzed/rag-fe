@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useOutletContext } from 'react-router-dom';
-import { login } from '../services/api'
+import { login, getUserProfile } from '../services/api'
 
 const LoginPage = () => {
   const { setIsAuthenticated } = useOutletContext();
@@ -16,14 +16,19 @@ const LoginPage = () => {
     setError('');
     
     try {
-        const response = await login(email, password);
-        console.log(response)
-        localStorage.setItem('token', response.data.access_token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        // First login to get the token
+        const loginResponse = await login(email, password);
+        console.log(loginResponse);
+        localStorage.setItem('token', loginResponse.data.access_token);
+        
+        // Then fetch user details
+        const userResponse = await getUserProfile();
+        localStorage.setItem('user', JSON.stringify(userResponse.data));
+        
         setIsAuthenticated(true);
         navigate('/contexts');
     } catch (err) { 
-        console.log(err)
+        console.log(err);
         setError(err.response?.data?.detail || 'Login failed. Please try again.');
     } finally {
         setIsLoading(false);

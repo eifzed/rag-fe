@@ -1,4 +1,3 @@
-// src/services/api.js
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8000/api';
@@ -13,7 +12,7 @@ api.interceptors.request.use(
   (config) => {
     // Get token from localStorage
     const token = localStorage.getItem('token');
-    
+    console.log("token", token);
     // If token exists, add it to the authorization header
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -132,7 +131,12 @@ export const login = async (email, password) => {
 
 // Add a logout function to clear the token
 export const logout = () => {
+  console.log("removing token in logout")
   localStorage.removeItem('token');
+};
+
+export const getUserProfile = () => {
+  return api.get('/auth/me');
 };
 
 export default api;

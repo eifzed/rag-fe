@@ -1,9 +1,10 @@
 // src/App.jsx
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate, Navigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from './components/UI/Navbar';
 import axios from 'axios';
-import api from './services/api'; // Import your API instance that has the base URL set
+import { checkAuthStatus } from './utils/auth';
+
 
 function App() {
   const navigate = useNavigate();
@@ -15,36 +16,15 @@ function App() {
   // Verify token with backend on load
   useEffect(() => {
     const verifyAuth = async () => {
-      const token = localStorage.getItem('token');
-      
-      if (!token) {
-        setIsAuthenticated(false);
-        setIsLoading(false);
+      if (!isPublicRoute) {
+        const isValid = await checkAuthStatus();
+        setIsAuthenticated(isValid);
         
-        // Redirect to login if not on a public route
-        if (!isPublicRoute) {
+        if (!isValid) {
           navigate('/login');
         }
-        return;
       }
-      
-      try {
-        // Call the /api/auth/me endpoint to verify token
-        await api.get('/auth/me');
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.error('Authentication verification failed:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setIsAuthenticated(false);
-        
-        // Redirect to login if not on a public route
-        if (!isPublicRoute) {
-          navigate('/login');
-        }
-      } finally {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     };
     
     verifyAuth();
@@ -57,6 +37,7 @@ function App() {
       error => {
         if (error.response && error.response.status === 401) {
           // Unauthorized - clear token and redirect to login
+          console.log("removing token in middleware")
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           setIsAuthenticated(false);

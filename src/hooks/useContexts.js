@@ -1,12 +1,13 @@
 // src/hooks/useContexts.js
-import { useState, useEffect, useCallback } from 'react';
-import { getContexts, getContextById, createContext } from '../services/api';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { getContexts, createContext } from '../services/api';
 
 export const useContexts = (initialSearchTerm = '') => {
   const [contexts, setContexts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const isFirstRender = useRef(true);
 
   const fetchContexts = useCallback(async () => {
     try {
@@ -23,7 +24,10 @@ export const useContexts = (initialSearchTerm = '') => {
   }, [searchTerm]);
 
   useEffect(() => {
-    fetchContexts();
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      fetchContexts();
+    }
   }, [fetchContexts]);
 
   const addContext = async (name, description) => {
