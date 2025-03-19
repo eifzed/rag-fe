@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DocumentItem = ({ document, onDelete }) => {
+const DocumentItem = ({ document, onDelete, onDownload }) => {
   return (
     <div className="flex justify-between items-center bg-white rounded-lg shadow-sm p-4 mb-3 hover:bg-gray-50">
       <div className="flex items-center">
@@ -14,14 +14,20 @@ const DocumentItem = ({ document, onDelete }) => {
         </div>
       </div>
       <div className="flex space-x-2">
-        <a 
+        {/* <a 
           href={document.download_link} 
           target="_blank"
           rel="noopener noreferrer"
           className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 text-sm"
         >
-          View
-        </a>
+          Download
+        </a> */}
+        <button 
+          onClick={() => onDownload(document.id)}
+          className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 text-sm"
+        >
+          Download
+        </button>
         <button 
           onClick={() => onDelete(document.id)}
           className="px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 text-sm"

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import DocumentItem from './DocumentItem';
 import Button from '../UI/Button';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
+import {downloadDocument} from "../../services/api"
+
 
 const DocumentList = ({ documents = [], onUpload, onDelete, isUploading }) => {
   const [fileToDelete, setFileToDelete] = useState(null);
@@ -9,6 +11,10 @@ const DocumentList = ({ documents = [], onUpload, onDelete, isUploading }) => {
   const handleDeleteRequest = (document) => {
     setFileToDelete(document);
   };
+
+  const handleDownloadRequest = async (documentId) => {
+    downloadDocument(documentId)
+  }
 
   const handleConfirmDelete = async () => {
     if (fileToDelete) {
@@ -53,7 +59,7 @@ const DocumentList = ({ documents = [], onUpload, onDelete, isUploading }) => {
         </div>
       ) : (
         documents.map((doc) => (
-          <DocumentItem key={doc.id} document={doc} onDelete={() => handleDeleteRequest(doc)} />
+          <DocumentItem key={doc.id} document={doc} onDelete={() => handleDeleteRequest(doc)} onDownload={() => handleDownloadRequest(doc.id)}/>
         ))
       )}
     </div>

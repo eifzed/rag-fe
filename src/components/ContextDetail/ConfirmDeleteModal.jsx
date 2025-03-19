@@ -1,8 +1,7 @@
 import Button from '../UI/Button';
-import React, { useState } from 'react';
+import React from 'react';
 
 const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm, documentName }) => {
-    const [input, setInput] = useState('');
   
     if (!isOpen) return null;
   
@@ -11,23 +10,15 @@ const ConfirmDeleteModal = ({ isOpen, onClose, onConfirm, documentName }) => {
         <div className="bg-white p-6 rounded-lg shadow-lg w-96">
           <h3 className="text-lg font-semibold mb-4">Confirm Deletion</h3>
           <p className="text-gray-600 mb-2">
-            Type the document name "{documentName}" to confirm deletion.
+            Are you sure you want to delete document "{documentName}"?  
           </p>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="w-full p-2 border rounded mb-4"
-            placeholder="Enter document name"
-          />
           <div className="flex justify-end space-x-2">
             <Button variant="secondary" onClick={onClose}>Cancel</Button>
             <Button 
               variant="danger" 
-              onClick={() => input === documentName && onConfirm()}
-              disabled={input !== documentName}
+              onClick={onConfirm}
             >
-              Delete
+              Yes
             </Button>
           </div>
         </div>

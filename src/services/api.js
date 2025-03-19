@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'https://rag-production-08bc.up.railway.app/api';
+// const API_URL = 'http://localhost:8000/api';
 
 // Create axios instance
 const api = axios.create({
@@ -10,10 +11,8 @@ const api = axios.create({
 // Add request interceptor to automatically add the token to every request
 api.interceptors.request.use(
   (config) => {
-    // Get token from localStorage
     const token = localStorage.getItem('token');
-    console.log("token", token);
-    // If token exists, add it to the authorization header
+    console.log("token", token)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -139,5 +138,33 @@ export const logout = () => {
 export const getUserProfile = () => {
   return api.get('/auth/me');
 };
+
+export const downloadDocument = async(fileId) => {
+  try {
+    const response = await api.get(`/download/${fileId}`, {
+      responseType: "blob",
+    });
+    if (response.status !== 200){
+      throw new Error("failed to download file")
+    }
+
+    const contentDisposition = response.headers["content-disposition"];
+    const filename = contentDisposition
+        ? contentDisposition.split("filename=")[1]?.replaceAll('"', "") || "downloaded_file"
+        : "downloaded_file";
+
+      // Create a Blob URL and trigger download
+      const blobUrl = URL.createObjectURL(new Blob([response.data]));
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl); // Cleanup
+  } catch (error) {
+    console.error("Download Error", error)
+  }
+}
 
 export default api;
