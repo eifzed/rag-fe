@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useOutletContext } from 'react-router-dom';
 import { login, getUserProfile } from '../../services/api'
 import { checkAuthStatus } from '../../utils/auth';
@@ -11,11 +11,16 @@ const LoginWindow = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  if (checkAuthStatus()){
-    navigate('/contexts');
-  };
-
-
+  useEffect(() => {
+    const checkAuth = async () => {
+      const isAuthenticated = await checkAuthStatus();
+      if (isAuthenticated) {
+        setIsAuthenticated(true);
+        navigate('/contexts');
+      }
+    };
+    checkAuth();
+  }, [navigate, setIsAuthenticated]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
