@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logoSvg from '../../assets/logo.svg';
+import logoSvg from '../../assets/logo_new.svg';
 
 const Navbar = () => {
   const location = useLocation();
@@ -8,23 +8,7 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const dropdownRef = useRef(null);
-  
-  // Check authentication status on mount and when location changes
-  useEffect(() => {
-    checkAuthStatus();
-    
-    // Setup event listener for storage changes
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Create a custom event listener for auth changes
-    window.addEventListener('authChange', checkAuthStatus);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('authChange', checkAuthStatus);
-    };
-  }, [location]);
-  
+
   const checkAuthStatus = () => {
     const userString = localStorage.getItem('user');
     const token = localStorage.getItem('token');
@@ -46,6 +30,25 @@ const Navbar = () => {
       checkAuthStatus();
     }
   };
+  // Check authentication status on mount and when location changes
+  useEffect(() => {
+    checkAuthStatus();
+    
+    // Setup event listener for storage changes
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Create a custom event listener for auth changes
+    window.addEventListener('authChange', checkAuthStatus);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('authChange', checkAuthStatus);
+    };
+  }, [location]);
+  
+  
+  
+  
 
   useEffect(() => {
     // Close dropdown when clicking outside
