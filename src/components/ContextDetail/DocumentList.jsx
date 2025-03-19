@@ -1,45 +1,34 @@
-// src/components/ContextDetail/DocumentList.jsx
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import DocumentItem from './DocumentItem';
 import Button from '../UI/Button';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 const DocumentList = ({ documents = [], onUpload, onDelete, isUploading }) => {
-  const fileInputRef = useRef(null);
-  const [dragActive, setDragActive] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState(null);
 
-  const handleFileUpload = (file) => {
-    if (file) {
-      onUpload(file);
-    }
+  const handleDeleteRequest = (document) => {
+    setFileToDelete(document);
   };
 
-  const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFileUpload(e.dataTransfer.files[0]);
+  const handleConfirmDelete = async () => {
+    if (fileToDelete) {
+      await onDelete(fileToDelete.id);
+      setFileToDelete(null);
     }
   };
 
   return (
     <div className="mt-6">
+      <ConfirmDeleteModal 
+        isOpen={!!fileToDelete} 
+        onClose={() => setFileToDelete(null)} 
+        onConfirm={handleConfirmDelete} 
+        documentName={fileToDelete?.filename || ''} 
+      />
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold text-gray-800">Documents</h3>
         <Button
-          onClick={() => fileInputRef.current.click()}
+          onClick={() => document.getElementById('fileInput').click()}
           variant="primary"
           disabled={isUploading}
         >
@@ -47,31 +36,15 @@ const DocumentList = ({ documents = [], onUpload, onDelete, isUploading }) => {
         </Button>
         <input
           type="file"
-          ref={fileInputRef}
+          id="fileInput"
           className="hidden"
           onChange={(e) => {
             if (e.target.files && e.target.files[0]) {
-              handleFileUpload(e.target.files[0]);
-              e.target.value = null; // Reset input
+              onUpload(e.target.files[0]);
+              e.target.value = null;
             }
           }}
         />
-      </div>
-
-      <div 
-        className={`border-2 border-dashed rounded-lg p-6 mb-6 text-center ${
-          dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
-        }`}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-      >
-        <p className="text-gray-500">
-          {dragActive 
-            ? 'Drop file here to upload' 
-            : 'Drag and drop a file here, or click "Add Document" to upload'}
-        </p>
       </div>
 
       {documents.length === 0 ? (
@@ -80,7 +53,7 @@ const DocumentList = ({ documents = [], onUpload, onDelete, isUploading }) => {
         </div>
       ) : (
         documents.map((doc) => (
-          <DocumentItem key={doc.id} document={doc} onDelete={onDelete} />
+          <DocumentItem key={doc.id} document={doc} onDelete={() => handleDeleteRequest(doc)} />
         ))
       )}
     </div>

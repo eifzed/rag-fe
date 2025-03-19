@@ -41,7 +41,7 @@ const ChatHeader = ({
         <div className="flex items-center space-x-3">
           {messages.length > 0 && (
             <Button onClick={handleResetChat} variant="secondary" size="sm">
-              New Chat
+              Clear Chat
             </Button>
           )}
         </div>

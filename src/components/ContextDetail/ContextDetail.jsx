@@ -1,4 +1,3 @@
-// src/components/ContextDetail/ContextDetail.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContextDetail } from '../../hooks/useContextDetail';
@@ -29,9 +28,7 @@ const ContextDetail = ({ contextId }) => {
   };
 
   const handleDelete = async (fileId) => {
-    if (window.confirm('Are you sure you want to delete this document?')) {
-      await deleteDocument(fileId);
-    }
+    await deleteDocument(fileId);
   };
 
   if (loading) {
