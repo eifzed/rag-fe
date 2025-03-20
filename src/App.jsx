@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from './components/UI/Navbar';
 import axios from 'axios';
 import { checkAuthStatus } from './utils/auth';
+import { removeAuth } from './utils/auth';
 
 
 function App() {
@@ -38,8 +39,7 @@ function App() {
         if (error.response && error.response.status === 401) {
           // Unauthorized - clear token and redirect to login
           console.log("removing token in middleware")
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
+          removeAuth();
           setIsAuthenticated(false);
           
           // Only navigate if not already on login or signup

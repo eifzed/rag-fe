@@ -8,10 +8,11 @@ import ChatPage from './pages/ChatPage';
 import LoginPage from './pages/LoginPage'; // You'll need to create this
 import SignupPage from './pages/SignupPage';
 import LandingPage from './pages/LandingPage';
+import { checkAuthStatus } from './utils/auth';
 
 // Auth protection wrapper component
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('token') !== null;
+  const isAuthenticated = checkAuthStatus();
   
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

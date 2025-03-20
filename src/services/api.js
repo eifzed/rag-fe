@@ -6,6 +6,7 @@ const API_URL = 'https://rag-production-08bc.up.railway.app/api';
 // Create axios instance
 const api = axios.create({
   baseURL: API_URL,
+  timeout: 30000,
 });
 
 // Add request interceptor to automatically add the token to every request
@@ -117,22 +118,12 @@ export const login = async (email, password) => {
       password,
     });
     
-    // Save token to localStorage after successful login
-    if (response.data && response.data.access_token) {
-      localStorage.setItem('token', response.data.access_token);
-    }
     
     return response;
   } catch (error) {
     console.error('Error login:', error);
     throw error;
   }
-};
-
-// Add a logout function to clear the token
-export const logout = () => {
-  console.log("removing token in logout")
-  localStorage.removeItem('token');
 };
 
 export const getUserProfile = () => {

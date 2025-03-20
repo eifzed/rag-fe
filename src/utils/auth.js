@@ -44,3 +44,21 @@ export const checkAuthStatus = async () => {
     return false;
   }
 };
+
+export const removeAuth = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+};
+
+
+export const getUserAuth = () => {
+  return {
+    token: localStorage.getItem('token'),
+    user: localStorage.getItem('user'),
+  };
+};
+
+export const setUserAUth = (token, user) => {
+  localStorage.setItem('token', token);
+  localStorage.setItem('user', JSON.stringify(user))
+}
