@@ -8,7 +8,7 @@ const ContextDetailPage = () => {
   
   return (
     <div className="flex-1">
-      <ContextDetail contextId={contextId} />
+        <ContextDetail contextId={contextId} />
     </div>
   );
 };

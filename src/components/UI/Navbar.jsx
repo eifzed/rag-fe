@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logoSvg from '../../assets/logo_new.svg';
+import { getUserAuth } from '../../utils/auth';
 
 const Navbar = () => {
   const location = useLocation();
@@ -10,12 +11,11 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
 
   const checkAuthStatus = () => {
-    const userString = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
+    const user = getUserAuth();
     
-    if (userString && token) {
+    if (user.token && user.user) {
       try {
-        setUser(JSON.parse(userString));
+        setUser(JSON.parse(user.user));
       } catch (error) {
         console.error('Error parsing user data:', error);
         setUser(null);
@@ -30,6 +30,7 @@ const Navbar = () => {
       checkAuthStatus();
     }
   };
+  
   // Check authentication status on mount and when location changes
   useEffect(() => {
     checkAuthStatus();
@@ -46,10 +47,6 @@ const Navbar = () => {
     };
   }, [location]);
   
-  
-  
-  
-
   useEffect(() => {
     // Close dropdown when clicking outside
     const handleClickOutside = (event) => {
@@ -72,6 +69,7 @@ const Navbar = () => {
     console.log("removing token from localstorage in navbar");
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+
     setUser(null);
     setIsDropdownOpen(false);
     
@@ -96,14 +94,18 @@ const Navbar = () => {
   
   return (
     <nav className="bg-gray-800 text-white">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 pl-2 md:pl-6">
             <Link to="/" className="flex items-center">
               <img src={logoSvg} alt="Logo" className="h-8 w-auto" />
             </Link>
           </div>
-          <div className="flex items-center space-x-4">
+          
+          {/* Spacer to push content apart */}
+          <div className="flex-grow"></div>
+          
+          <div className="flex items-center space-x-6 pr-2 md:pr-6">
             <Link
               to="/contexts"
               className={`px-3 py-2 rounded-md text-sm font-medium ${
