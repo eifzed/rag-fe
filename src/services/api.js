@@ -138,9 +138,9 @@ export const getUserProfile = () => {
   return api.get('/auth/me');
 };
 
-export const downloadDocument = async(fileId) => {
+export const downloadDocument = async(contextId, fileId) => {
   try {
-    const response = await api.get(`/download/${fileId}`, {
+    const response = await api.get(`/download/${contextId}/${fileId}`, {
       responseType: "blob",
     });
     if (response.status !== 200){
@@ -165,5 +165,27 @@ export const downloadDocument = async(fileId) => {
     console.error("Download Error", error)
   }
 }
+
+export const scrapeUrl = async (url) => {
+  const response = await api.post('/scrape', {
+    url
+  })
+  
+  if (response.status !== 200) {
+    throw new Error(response.data.message || 'Failed to scrape URL');
+  }
+  
+  return response.data;
+};
+
+export const uploadTextDocumentToContext = async (contextId, data) => {
+  
+  const response = await api.post(`/contexts/${contextId}/text`, data)
+  if (response.status !== 200) {;
+    throw new Error(response.data.message || 'Failed to add text document');
+  }
+  
+  return response.data;
+};
 
 export default api;

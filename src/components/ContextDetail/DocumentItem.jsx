@@ -14,16 +14,8 @@ const DocumentItem = ({ document, onDelete, onDownload }) => {
         </div>
       </div>
       <div className="flex space-x-2">
-        {/* <a 
-          href={document.download_link} 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 text-sm"
-        >
-          Download
-        </a> */}
         <button 
-          onClick={() => onDownload(document.id)}
+          onClick={() => onDownload(document.context_id, document.id)}
           className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 text-sm"
         >
           Download

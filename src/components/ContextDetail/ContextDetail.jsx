@@ -12,16 +12,22 @@ const ContextDetail = ({ contextId }) => {
     loading, 
     error, 
     uploadDocument, 
+    uploadDocumentText,
     deleteDocument 
   } = useContextDetail(contextId);
   
   const [isUploading, setIsUploading] = useState(false);
   const navigate = useNavigate();
 
-  const handleUpload = async (file) => {
+  const handleUpload = async (file, data) => {
     setIsUploading(true);
     try {
-      await uploadDocument(file);
+      if (file) {
+        await uploadDocument(file);
+      } else{
+        await uploadDocumentText(data);
+      }
+      
     } finally {
       setIsUploading(false);
     }

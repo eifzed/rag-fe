@@ -1,6 +1,6 @@
 // src/hooks/useContextDetail.js
 import { useState, useEffect } from 'react';
-import { getContextById, uploadDocumentToContext, deleteDocumentFromContext } from '../services/api';
+import { getContextById, uploadDocumentToContext, deleteDocumentFromContext, uploadTextDocumentToContext } from '../services/api';
 
 export const useContextDetail = (contextId) => {
   const [context, setContext] = useState(null);
@@ -38,6 +38,17 @@ export const useContextDetail = (contextId) => {
     }
   };
 
+  const uploadDocumentText = async (data) => {
+    try {
+      await uploadTextDocumentToContext(contextId, data);
+      fetchContextDetail();
+      return true;
+    } catch (err) {
+      setError('Failed to upload document');
+      return false;
+    }
+  };
+
   const deleteDocument = async (fileId) => {
     try {
       await deleteDocumentFromContext(contextId, fileId);
@@ -55,6 +66,7 @@ export const useContextDetail = (contextId) => {
     error, 
     fetchContextDetail, 
     uploadDocument, 
+    uploadDocumentText,
     deleteDocument 
   };
 };
