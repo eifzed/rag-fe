@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
+import { deleteContext } from '../../services/api';
 
 const ContextItem = ({ context, onDelete }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -16,14 +17,9 @@ const ContextItem = ({ context, onDelete }) => {
     
     try {
       setIsDeleting(true);
-      const response = await fetch(`http://localhost:8000/api/contexts/${context.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      const isDeleted = await deleteContext(context.id);
 
-      if (response.ok) {
+      if (isDeleted) {
         if (onDelete) onDelete(context.id);
         setShowDeleteConfirm(false);
       } else {

@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://rag-production-08bc.up.railway.app/api';
-// const API_URL = 'http://localhost:8000/api';
+const API_URL = process.env.REACT_APP_API_URL;// const API_URL = 'http://localhost:8000/api';
 
 // Create axios instance
 const api = axios.create({
@@ -78,6 +77,16 @@ export const deleteDocumentFromContext = async (contextId, fileId) => {
     return true;
   } catch (error) {
     console.error(`Error deleting document ${fileId} from context ${contextId}:`, error);
+    throw error;
+  }
+};
+
+export const deleteContext = async (contextId) => {
+  try {
+    await api.delete(`/contexts/${contextId}`);
+    return true;
+  } catch (error) {
+    console.error(`Error deleting context ${contextId}:`, error);
     throw error;
   }
 };
