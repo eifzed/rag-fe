@@ -96,7 +96,7 @@ const ContextDetail = ({ contextId }) => {
             <p className="text-sm text-gray-500 mt-2">Created {formattedDate}</p>
           </div>
           <Link to={`/chat?contextId=${context.id}`}>
-            <Button variant="primary">
+            <Button variant="success">
               Chat with this Context
             </Button>
           </Link>

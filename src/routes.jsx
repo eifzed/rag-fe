@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage'; // You'll need to create this
 import SignupPage from './pages/SignupPage';
 import LandingPage from './pages/LandingPage';
 import { checkAuthStatus } from './utils/auth';
+import { ErrorBoundary } from 'react-error-boundary';
 
 // Auth protection wrapper component
 const ProtectedRoute = ({ children }) => {
@@ -32,11 +33,11 @@ const router = createBrowserRouter([
       },
       {
         path:'login',
-        element: <LoginPage/>
+        element: <ErrorBoundary><LoginPage/></ErrorBoundary>
       },
       {
         path: 'signup',
-        element: <SignupPage />
+        element: <ErrorBoundary><SignupPage /></ErrorBoundary>
       },
       {
         index: true,
@@ -44,19 +45,19 @@ const router = createBrowserRouter([
       },
       {
         path: 'contexts',
-        element: <ProtectedRoute><ContextsPage /></ProtectedRoute>
+        element: <ErrorBoundary><ProtectedRoute><ContextsPage /></ProtectedRoute></ErrorBoundary>
       },
       {
         path: 'contexts/:contextId',
-        element: <ProtectedRoute><ContextDetailPage /></ProtectedRoute>
+        element: <ErrorBoundary><ProtectedRoute><ContextDetailPage /></ProtectedRoute></ErrorBoundary>
       },
       {
         path: 'chat/:contextId',
-        element: <ProtectedRoute><ChatPage /></ProtectedRoute>
+        element: <ErrorBoundary><ProtectedRoute><ChatPage /></ProtectedRoute></ErrorBoundary>
       },
       {
         path: 'chat/',
-        element: <ProtectedRoute><ChatPage /></ProtectedRoute>
+        element: <ErrorBoundary><ProtectedRoute><ChatPage /></ProtectedRoute></ErrorBoundary>
       }
     ]
   },

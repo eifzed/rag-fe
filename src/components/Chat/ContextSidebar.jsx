@@ -38,7 +38,17 @@ const ContextSidebar = ({ isOpen, contextId, onSelectContext }) => {
                     : 'hover:bg-gray-200'
                 }`}
               >
-                <h4 className="font-medium">{context.name}</h4>
+                <h4 className="font-medium">
+                  <a 
+                    href={`/contexts/${context.id}`}
+                    className="text-blue-600 hover:underline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    {context.name}
+                  </a>
+                </h4>
                 {context.description && (
                   <p className="text-sm text-gray-600 truncate">{context.description}</p>
                 )}

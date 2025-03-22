@@ -2,6 +2,10 @@ import React from 'react';
 import { Menu } from 'lucide-react';
 import Button from '../UI/Button';
 import ContextSelector from './ContextSelector';
+import { Link } from 'react-router-dom';
+import { ExternalLink } from 'react-feather';
+
+
 
 const ChatHeader = ({ 
   contextDetails, 
@@ -26,13 +30,21 @@ const ChatHeader = ({
             <Menu size={24} />
           </button>
           <div>
-            <h2 className="text-xl font-semibold text-gray-800">
-              {contextId ? (
-                <span>
-                  Chat: <span className="text-blue-600">{contextDetails.name || 'Loading context...'}</span>
-                </span>
-              ) : 'Select a Context'}
-            </h2>
+          <h2 className="text-xl font-semibold text-gray-800">
+            {contextId ? (
+              <span className="flex items-center">
+                Chat: <span className="mx-1"></span>
+                <Link 
+                  to={`/contexts/${contextId}`} 
+                  className="text-blue-600 hover:underline flex items-center"
+                >
+                  {contextDetails.name || 'Loading context...'}
+                  <ExternalLink size={16} className="ml-1" />
+                </Link>
+              </span>
+            ) : 'Select a Context'}
+          </h2>
+
             {contextDetails.description && (
               <p className="text-sm text-gray-600 mt-1 max-w-2xl">{contextDetails.description}</p>
             )}

@@ -6,6 +6,8 @@ import ChatHeader from './ChatHeader';
 import ContextSidebar from './ContextSidebar';
 import { useChat } from '../../hooks/useChat';
 import { getContextById } from '../../services/api';
+import { ErrorBoundary } from 'react-error-boundary';
+
 
 const ChatWindow = ({ initialContextId }) => {
   const location = useLocation();
@@ -152,13 +154,15 @@ const ChatWindow = ({ initialContextId }) => {
         />
         
         <MessageList messages={messages} sources={sources} />
+        <ErrorBoundary>
+          <MessageInput 
+            onSendMessage={sendMessage}
+            isLoading={loading}
+            disabled={needsContextSelection}
+            ref={inputRef}
+          />
+        </ErrorBoundary>
         
-        <MessageInput 
-          onSendMessage={sendMessage}
-          isLoading={loading}
-          disabled={needsContextSelection}
-          ref={inputRef}
-        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-// src/components/Chat/MessageItem.jsx
+// Update your MessageItem.jsx
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -37,6 +37,19 @@ const MessageItem = ({ message }) => {
                     {children}
                   </code>
                 );
+              },
+              a({node, children, href, ...props}) {
+                return (
+                  <a 
+                    href={href} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`underline ${isUser ? 'text-white' : 'text-blue-600'} hover:opacity-80`}
+                    {...props}
+                  >
+                    {children}
+                  </a>
+                )
               }
             }}
           >
