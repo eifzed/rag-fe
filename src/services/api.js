@@ -48,11 +48,10 @@ export const getContextById = async (contextId) => {
 
 export const createContext = async (name, description) => {
   try {
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    
-    const response = await api.post('/contexts', formData);
+    const response = await api.post('/contexts', {
+      name,
+      description
+    });
     return response.data;
   } catch (error) {
     console.error('Error creating context:', error);
