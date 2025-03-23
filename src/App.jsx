@@ -38,7 +38,6 @@ function App() {
       error => {
         if (error.response && error.response.status === 401) {
           // Unauthorized - clear token and redirect to login
-          console.log("removing token in middleware")
           removeAuth();
           setIsAuthenticated(false);
           

@@ -32,8 +32,7 @@ export const checkAuthStatus = async () => {
     }
 
     if (isTokenExpired()) {
-      console.log("removing token in checkAuthStatus")
-      localStorage.removeItem('token');
+      removeAuth()
       return false;
     }
     

@@ -2,9 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { isAuthenticated } from '../utils/auth';
 import profile from '../assets/profile.jpeg';
-// Import these images to your assets folder
-import heroImage from '../assets/ideas-flow.svg'; // Add a hero illustration
-import smartSearchIcon from '../assets/search.svg'; // Feature icons
+import heroImage from '../assets/ideas-flow.svg';
+import smartSearchIcon from '../assets/search.svg';
 import chatIcon from '../assets/chat.svg';
 import organizationIcon from '../assets/organize.svg';
 

@@ -30,7 +30,6 @@ const LoginWindow = () => {
     try {
         // First login to get the token
         const loginResponse = await login(email, password);
-        console.log(loginResponse);
         localStorage.setItem('token', loginResponse.data.access_token);
         
         // Then fetch user details

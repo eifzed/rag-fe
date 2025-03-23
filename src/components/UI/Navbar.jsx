@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logoSvg from '../../assets/logo_new.svg';
-import { getUserAuth } from '../../utils/auth';
+import { getUserAuth, removeAuth } from '../../utils/auth';
 
 const Navbar = () => {
   const location = useLocation();
@@ -66,9 +66,7 @@ const Navbar = () => {
   };
   
   const handleLogout = () => {
-    console.log("removing token from localstorage in navbar");
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    removeAuth()
 
     setUser(null);
     setIsDropdownOpen(false);

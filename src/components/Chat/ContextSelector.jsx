@@ -11,7 +11,6 @@ const ContextSelector = ({ onSelectContext, selectedContextId }) => {
     const fetchContexts = async () => {
       try {
         setLoading(true);
-        console.log('getContexts ContextSelector')
         const data = await getContexts();
         setContexts(data);
         setError(null);

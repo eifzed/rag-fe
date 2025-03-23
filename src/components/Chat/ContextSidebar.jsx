@@ -9,7 +9,6 @@ const ContextSidebar = ({ isOpen, contextId, onSelectContext }) => {
   useEffect(() => {
     const fetchContexts = async () => {
       try {
-        console.log('getContexts ContextSidebar')
         const contexts = await getContexts();
         setContextList(contexts);
       } catch (error) {
