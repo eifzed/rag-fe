@@ -1,4 +1,3 @@
-// src/hooks/useChat.js
 import { useState, useCallback, useEffect } from 'react';
 import { sendChatMessage } from '../services/api';
 
@@ -69,8 +68,11 @@ export const useChat = (initialContextId = null) => {
       const userMessage = { role: 'user', content };
       setMessages(prev => [...prev, userMessage]);
       
+      // Get only the last 6 messages (or all if less than 6)
+      const lastMessages = [...messages, userMessage].slice(-6);
+      
       // Format history for API
-      const history = messages.map(msg => ({
+      const history = lastMessages.map(msg => ({
         role: msg.role,
         content: msg.content,
       }));
