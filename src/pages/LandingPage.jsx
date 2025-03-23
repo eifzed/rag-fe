@@ -140,7 +140,7 @@ const LandingPage = () => {
                   Software Engineer
                 </p>
                 <p className="mt-4 text-gray-600">
-                  Passionate about building intelligent applications that make information more accessible and useful. This knowledge assistant is designed to help you interact with your documents in a more natural way.
+                  Passionate about building intelligent and high-performing applications. This knowledge assistant is passion project designed to help you interact with your documents in a more natural way.
                 </p>
                 <div className="mt-6 flex gap-6 justify-center md:justify-start">
                   <a
