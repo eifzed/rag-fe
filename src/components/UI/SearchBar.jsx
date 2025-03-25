@@ -1,12 +1,12 @@
 // src/components/UI/SearchBar.jsx
-import React from 'react';
+import React from "react";
 
 const SearchBar = ({ value, onChange, onSearch, placeholder }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSearch();
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className="flex w-full max-w-md">
       <input
@@ -18,7 +18,7 @@ const SearchBar = ({ value, onChange, onSearch, placeholder }) => {
       />
       <button
         type="submit"
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md transition-colors"
+        className="bg-[#7e58f2] hover:bg-[#6A46D8] text-white px-4 py-2 rounded-r-md transition-colors"
       >
         Search
       </button>

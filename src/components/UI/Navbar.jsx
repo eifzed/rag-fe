@@ -85,8 +85,8 @@ const Navbar = () => {
   // Function to truncate email if too long
   const truncateEmail = (email) => {
     if (!email) return '';
-    if (email.length > 24) {
-      return email.substring(0, 21) + '...';
+    if (email.length > 30) {
+      return email.substring(0, 27) + '...';
     }
     return email;
   };
@@ -105,7 +105,7 @@ const Navbar = () => {
           <div className="flex-grow"></div>
           
           <div className="flex items-center space-x-6 pr-2 md:pr-6">
-            <Link
+            {/* <Link
               to="/contexts"
               className={`px-3 py-2 rounded-md text-sm font-medium ${
                 isActive('/contexts') 
@@ -114,10 +114,10 @@ const Navbar = () => {
               }`}
             >
               My Contexts
-            </Link>
+            </Link> */}
             <Link
               to="/chat"
-              className={`px-3 py-2 rounded-md text-sm font-medium ${
+              className={`px-3 py-2 rounded-md text-lg font-medium ${
                 isActive('/chat') 
                   ? 'bg-gray-900 text-white' 
                   : 'text-gray-300 hover:bg-gray-700 hover:text-white'
@@ -132,7 +132,7 @@ const Navbar = () => {
                 onClick={toggleDropdown}
                 aria-expanded={isDropdownOpen}
                 aria-haspopup="true"
-                className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                className="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               >
                 {user && user.avatar_url ? (
                   <img
@@ -151,12 +151,18 @@ const Navbar = () => {
               
               {/* Dropdown Menu */}
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                <div className="absolute right-0 mt-2 w-60 bg-white rounded-md shadow-lg py-1 z-10">
                   {user ? (
                     <>
                       <div className="px-4 py-2 text-sm text-gray-700 border-b truncate">
                         {truncateEmail(user.email)}
                       </div>
+                      <button
+                        onClick={()=>navigate("/contexts")}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        My Contexts
+                      </button>
                       <button
                         onClick={handleLogout}
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

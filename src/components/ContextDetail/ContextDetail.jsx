@@ -4,7 +4,7 @@ import { useContextDetail } from '../../hooks/useContextDetail';
 import DocumentList from './DocumentList';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import { formatDistanceToNow } from 'date-fns';
-import chatIcon from '../../assets/chat-button.svg';
+import chatIcon from '../../assets/new_chat_button.png';
 
 const ContextDetail = ({ contextId }) => {
   const { 
