@@ -8,7 +8,6 @@
     "@testing-library/user-event": "^14.5.1",
     "axios": "^1.8.3",
     "date-fns": "^2.30.0",
-    "dotenv": "^16.4.7",
     "lucide-react": "^0.482.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -20,13 +19,15 @@
     "react-slick": "^0.30.3",
     "react-syntax-highlighter": "^15.6.1",
     "remark-gfm": "^4.0.1",
+    "serve": "^14.2.1",
     "web-vitals": "^3.5.0"
   },
   "scripts": {
     "start": "NODE_OPTIONS=--max_old_space_size=4096 react-scripts start",
     "build": "NODE_OPTIONS=--max_old_space_size=4096 react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve": "serve -s build"
   },
   "eslintConfig": {
     "extends": [
