@@ -11,11 +11,11 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
 
   const checkAuthStatus = () => {
-    const user = getUserAuth();
+    const authData = getUserAuth();
     
-    if (user.token && user.user) {
+    if (authData.token && authData.user) {
       try {
-        setUser(JSON.parse(user.user));
+        setUser(JSON.parse(authData.user));
       } catch (error) {
         console.error('Error parsing user data:', error);
         setUser(null);
@@ -25,15 +25,16 @@ const Navbar = () => {
     }
   };
   
-  const handleStorageChange = (e) => {
-    if (e.key === 'user' || e.key === 'token') {
-      checkAuthStatus();
-    }
-  };
+ 
   
   // Check authentication status on mount and when location changes
   useEffect(() => {
     checkAuthStatus();
+    const handleStorageChange = (e) => {
+      if (e.key === 'user' || e.key === 'token') {
+        checkAuthStatus();
+      }
+    };
     
     // Setup event listener for storage changes
     window.addEventListener('storage', handleStorageChange);
@@ -45,7 +46,7 @@ const Navbar = () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('authChange', checkAuthStatus);
     };
-  }, [location]);
+  }, []);
   
   useEffect(() => {
     // Close dropdown when clicking outside
@@ -66,7 +67,7 @@ const Navbar = () => {
   };
   
   const handleLogout = () => {
-    removeAuth()
+    removeAuth();
 
     setUser(null);
     setIsDropdownOpen(false);
@@ -129,6 +130,8 @@ const Navbar = () => {
             <div className="relative ml-4" ref={dropdownRef}>
               <button
                 onClick={toggleDropdown}
+                aria-expanded={isDropdownOpen}
+                aria-haspopup="true"
                 className="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               >
                 {user && user.avatar_url ? (

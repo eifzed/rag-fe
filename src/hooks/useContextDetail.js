@@ -1,13 +1,14 @@
 // src/hooks/useContextDetail.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getContextById, uploadDocumentToContext, deleteDocumentFromContext, uploadTextDocumentToContext } from '../services/api';
 
 export const useContextDetail = (contextId) => {
   const [context, setContext] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isOperationLoading, setIsOperationLoading] = useState(false);
 
-  const fetchContextDetail = async () => {
+  const fetchContextDetail = useCallback(async () => {
     if (!contextId) return;
     
     try {
@@ -16,47 +17,56 @@ export const useContextDetail = (contextId) => {
       setContext(data);
       setError(null);
     } catch (err) {
-      setError('Failed to fetch context details');
+      setError(`Failed to fetch context details: ${err.message || 'Unknown error'}`);
       console.error(err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [contextId]);
 
   useEffect(() => {
     fetchContextDetail();
-  }, [contextId]);
+  }, [fetchContextDetail]);
 
   const uploadDocument = async (file) => {
     try {
+      setIsOperationLoading(true);
       await uploadDocumentToContext(contextId, file);
-      fetchContextDetail();
+      await fetchContextDetail();
       return true;
     } catch (err) {
-      setError('Failed to upload document');
+      setError(`Failed to upload document: ${err.message || 'Unknown error'}`);
       return false;
+    } finally {
+      setIsOperationLoading(false);
     }
   };
 
   const uploadDocumentText = async (data) => {
     try {
+      setIsOperationLoading(true);
       await uploadTextDocumentToContext(contextId, data);
-      fetchContextDetail();
+      await fetchContextDetail();
       return true;
     } catch (err) {
-      setError('Failed to upload document');
+      setError(`Failed to upload document: ${err.message || 'Unknown error'}`);
       return false;
+    } finally {
+      setIsOperationLoading(false);
     }
   };
 
   const deleteDocument = async (fileId) => {
     try {
+      setIsOperationLoading(true);
       await deleteDocumentFromContext(contextId, fileId);
-      fetchContextDetail();
+      await fetchContextDetail();
       return true;
     } catch (err) {
-      setError('Failed to delete document');
+      setError(`Failed to delete document: ${err.message || 'Unknown error'}`);
       return false;
+    } finally {
+      setIsOperationLoading(false);
     }
   };
 
@@ -64,6 +74,7 @@ export const useContextDetail = (contextId) => {
     context, 
     loading, 
     error, 
+    isOperationLoading,
     fetchContextDetail, 
     uploadDocument, 
     uploadDocumentText,

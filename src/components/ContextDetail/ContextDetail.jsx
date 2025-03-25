@@ -1,41 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useContextDetail } from '../../hooks/useContextDetail';
 import DocumentList from './DocumentList';
 import LoadingSpinner from '../UI/LoadingSpinner';
-import Button from '../UI/Button';
 import { formatDistanceToNow } from 'date-fns';
-import chatIcon from '../../assets/chat-button.svg'
+import chatIcon from '../../assets/chat-button.svg';
 
 const ContextDetail = ({ contextId }) => {
   const { 
     context, 
     loading, 
     error, 
+    isOperationLoading,
     uploadDocument, 
     uploadDocumentText,
     deleteDocument 
   } = useContextDetail(contextId);
   
-  const [isUploading, setIsUploading] = useState(false);
   const navigate = useNavigate();
 
   const handleUpload = async (file, data) => {
-    setIsUploading(true);
     try {
       if (file) {
         await uploadDocument(file);
-      } else{
+      } else {
         await uploadDocumentText(data);
       }
-      
-    } finally {
-      setIsUploading(false);
+    } catch (err) {
+      // Error is already handled in the hook
+      console.error('Upload error:', err);
     }
   };
 
   const handleDelete = async (fileId) => {
-    await deleteDocument(fileId);
+    try {
+      await deleteDocument(fileId);
+    } catch (err) {
+      // Error is already handled in the hook
+      console.error('Delete error:', err);
+    }
   };
 
   if (loading) {
@@ -104,14 +107,13 @@ const ContextDetail = ({ contextId }) => {
               Chat with this Context
             </span>
           </Link>
-
         </div>
 
         <DocumentList 
           documents={context.files} 
           onUpload={handleUpload}
           onDelete={handleDelete}
-          isUploading={isUploading}
+          isUploading={isOperationLoading}
         />
       </div>
     </div>

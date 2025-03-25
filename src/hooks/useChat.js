@@ -120,16 +120,16 @@ export const useChat = (initialContextId = null) => {
   }, [contextId]);
 
   // For debugging purposes
-  const clearAllChatCache = useCallback(() => {
-    const keys = Object.keys(localStorage);
-    keys.forEach(key => {
-      if (key.startsWith('chat_history_')) {
-        localStorage.removeItem(key);
-      }
-    });
-    setMessages([]);
-    setSources([]);
-  }, []);
+  // const clearAllChatCache = useCallback(() => {
+  //   const keys = Object.keys(localStorage);
+  //   keys.forEach(key => {
+  //     if (key.startsWith('chat_history_')) {
+  //       localStorage.removeItem(key);
+  //     }
+  //   });
+  //   setMessages([]);
+  //   setSources([]);
+  // }, []);
 
   return {
     messages,
@@ -140,6 +140,5 @@ export const useChat = (initialContextId = null) => {
     sendMessage,
     selectContext,
     resetChat,
-    clearAllChatCache
   };
 };
