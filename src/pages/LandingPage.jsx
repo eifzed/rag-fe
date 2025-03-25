@@ -85,14 +85,14 @@ const LandingPage = () => {
             </div>
             <div className="flex justify-center">
               {/* Fixed height/width container to maintain consistent dimensions */}
-              <div className="w-full max-w-md h-90 overflow-hidden relative">
+              <div className="w-full max-w-md h-82 overflow-hidden relative">
                 <Slider {...sliderSettings}>
                   {heroImages.map((image, index) => (
                     <div key={index} className="outline-none">
                       <img
                         src={image}
                         alt={`AI Knowledge Assistant ${index + 1}`}
-                        className="w-full h-83 object-contain"
+                        className="w-full h-81 object-contain"
                       />
                     </div>
                   ))}
