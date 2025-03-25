@@ -5,6 +5,7 @@ import DocumentList from './DocumentList';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import Button from '../UI/Button';
 import { formatDistanceToNow } from 'date-fns';
+import chatIcon from '../../assets/chat-button.svg'
 
 const ContextDetail = ({ contextId }) => {
   const { 
@@ -95,11 +96,15 @@ const ContextDetail = ({ contextId }) => {
             <p className="text-gray-600 mt-1">{context.description}</p>
             <p className="text-sm text-gray-500 mt-2">Created {formattedDate}</p>
           </div>
-          <Link to={`/chat?contextId=${context.id}`}>
-            <Button variant="success">
+          <Link to={`/chat?contextId=${context.id}`} className="relative group">
+            <div className="flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full hover:bg-gray-200 cursor-pointer shadow-md transition-transform transform hover:scale-110">
+              <img src={chatIcon} alt="Chat Icon" className="w-14 h-14" />
+            </div>
+            <span className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 px-3 py-1 text-sm text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap w-48 text-center">
               Chat with this Context
-            </Button>
+            </span>
           </Link>
+
         </div>
 
         <DocumentList 
