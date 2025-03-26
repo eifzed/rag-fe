@@ -9,8 +9,16 @@ const isTokenExpired = () => {
   if (!token) return true;
 
   try {
-    const payloadBase64 = token.split('.')[1]; // Get the payload part
-    const decodedPayload = JSON.parse(atob(payloadBase64)); // Decode from Base64
+    const payloadBase64 = token.split('.')[1];
+    const base64 = payloadBase64.replace(/-/g, '+').replace(/_/g, '/');
+    const decodedPayload = JSON.parse(
+      decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      )
+    );
     
     if (!decodedPayload.exp) {
         throw new Error("JWT does not contain an 'exp' field.");
@@ -22,7 +30,6 @@ const isTokenExpired = () => {
       console.error("Invalid JWT:", error);
       return true; // Treat invalid tokens as expired
   }
-
 };
 
 export const checkAuthStatus = async () => {

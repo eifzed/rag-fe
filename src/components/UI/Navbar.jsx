@@ -46,7 +46,7 @@ const Navbar = () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('authChange', checkAuthStatus);
     };
-  }, []);
+  }, [location.pathname]); // Add location.pathname as a dependency to check auth on route changes
   
   useEffect(() => {
     // Close dropdown when clicking outside
