@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useOutletContext } from 'react-router-dom';
-import { getUserProfile, signup } from '../../services/api';
+import { signup } from '../../services/api';
+import { setUserAUth } from '../../utils/auth'
 
 const SignupWindow = () => {
   const { setIsAuthenticated } = useOutletContext();
@@ -42,18 +43,13 @@ const SignupWindow = () => {
     try {
       const avatarUrl = generateAvatarUrl(email);
       
-      // First create account and get token
       const signupResponse = await signup(email, password, avatarUrl);
-      localStorage.setItem('token', signupResponse.data.access_token);
       
-      // Then fetch user details
-      const userResponse = await getUserProfile();
-      localStorage.setItem('user', JSON.stringify(userResponse.data));
-      
+      setUserAUth(signupResponse.data.access_token, signupResponse.data.user)
       setIsAuthenticated(true);
       navigate('/contexts');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create account. Please try again.');
+      setError(err.detail || 'Failed to create account. Please try again.');
     } finally {
       setIsLoading(false);
     }

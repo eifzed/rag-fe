@@ -37,7 +37,6 @@ function App() {
       response => response,
       error => {
         if (error.response && error.response.status === 401) {
-          // Unauthorized - clear token and redirect to login
           removeAuth();
           setIsAuthenticated(false);
           

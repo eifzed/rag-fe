@@ -130,6 +130,7 @@ const DocumentList = ({ documents = [], onUpload, onDelete, isUploading }) => {
             onDelete={() => handleDeleteRequest(doc)}
             onDownload={() => handleDownloadRequest(doc.context_id, doc.id)}
             icon={getIconForType(doc.content_type)}
+            isDeleteModalActive={!!fileToDelete}
           />
         ))}
 
