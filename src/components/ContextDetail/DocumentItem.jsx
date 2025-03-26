@@ -27,15 +27,31 @@ const DocumentItem = ({ document, onDelete, onDownload, icon }) => {
       <div className="flex space-x-2">
         <button 
           onClick={() => onDownload(document.context_id, document.id)}
-          className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 text-sm"
+          className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors relative group"
+          aria-label="Download document"
         >
-          Download
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span className="absolute top-full mt-1 right-0 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+            Download document
+          </span>
         </button>
         <button 
           onClick={() => onDelete(document.id)}
-          className="px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 text-sm"
+          className="p-2 text-red-500 hover:bg-red-50 rounded-md transition-colors relative group"
+          aria-label="Delete document"
         >
-          Delete
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 6h18"></path>
+            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+          </svg>
+          <span className="absolute top-full mt-1 right-0 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+            Delete document
+          </span>
         </button>
       </div>
     </div>

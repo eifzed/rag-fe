@@ -2,6 +2,8 @@ import React, { useState, forwardRef } from 'react';
 import Button from '../UI/Button';
 import { useNotification } from '../../contexts/NotificationContext';
 
+
+const MESSAGE_LENGTH_LIMIT = Number(process.env.MESSAGE_LENGTH_LIMIT) || 1000;
 const MessageInput = forwardRef(({ onSendMessage, isLoading, disabled }, ref) => {
   const [message, setMessage] = useState('');
   const { showNotification } = useNotification();
@@ -10,8 +12,8 @@ const MessageInput = forwardRef(({ onSendMessage, isLoading, disabled }, ref) =>
     e.preventDefault();
     
     if (message.trim() && !isLoading) {
-      if (message.length > 4000) {
-        showNotification('Message is too long. Please keep it under 4000 characters.', 'warning');
+      if (message.length > MESSAGE_LENGTH_LIMIT) {
+        showNotification(`Message is too long. Please keep it under ${MESSAGE_LENGTH_LIMIT} characters.`, 'warning');
         return;
       }
       

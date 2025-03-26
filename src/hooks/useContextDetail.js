@@ -38,7 +38,7 @@ export const useContextDetail = (contextId) => {
       setIsOperationLoading(true);
       const response =  await uploadDocumentToContext(contextId, file);
       if (response.status===200) {
-        showNotification('Document uploaded successfully', 'success');
+        showNotification('Document uploaded. Wait until the status is SUCCESS to include it in the chat', 'success');
         setShouldFetch(true);
         await fetchContextDetail();
         return true;
