@@ -79,15 +79,15 @@ const ContextDetail = ({ contextId }) => {
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-start mb-6">
-          <div>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+          <div className="mb-4 sm:mb-0">
             <h2 className="text-2xl font-bold text-gray-800">{context.name}</h2>
             <p className="text-gray-600 mt-1">{context.description}</p>
             <p className="text-sm text-gray-500 mt-2">Created {formattedDate}</p>
           </div>
-          <Link to={`/chat?contextId=${context.id}`} className="relative group">
-            <div className="flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full hover:bg-gray-200 cursor-pointer shadow-md transition-transform transform hover:scale-110">
-              <img src={chatIcon} alt="Chat Icon" className="w-14 h-14" />
+          <Link to={`/chat?contextId=${context.id}`} className="relative group self-end sm:self-auto">
+            <div className="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full hover:bg-gray-200 cursor-pointer shadow-md transition-transform transform hover:scale-110">
+              <img src={chatIcon} alt="Chat Icon" className="w-10 h-10 sm:w-14 sm:h-14" />
             </div>
             <span className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 px-3 py-1 text-sm text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap w-48 text-center">
               Chat with this Context

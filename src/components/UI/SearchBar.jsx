@@ -8,7 +8,7 @@ const SearchBar = ({ value, onChange, onSearch, placeholder }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-md">
+    <form onSubmit={handleSubmit} className="flex w-full">
       <input
         type="text"
         className="flex-1 border rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
