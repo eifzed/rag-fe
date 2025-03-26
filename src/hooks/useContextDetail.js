@@ -26,6 +26,14 @@ export const useContextDetail = (contextId) => {
     }
   }, [contextId, showNotification]);
 
+  const showUploadNotification = (status, errorMessage) => {
+    if (status === 'success') {
+      showNotification('Document uploaded. Wait until the status is SUCCESS to include it in the chat','success');
+    } else if (status === 'failed') {
+      showNotification('Failed to upload document: '+ errorMessage,'error');
+    } 
+  };
+
   useEffect(() => {
     if (shouldFetch) {
       fetchContextDetail();
@@ -38,7 +46,7 @@ export const useContextDetail = (contextId) => {
       setIsOperationLoading(true);
       const response =  await uploadDocumentToContext(contextId, file);
       if (response.status===200) {
-        showNotification('Document uploaded. Wait until the status is SUCCESS to include it in the chat', 'success');
+        showUploadNotification('success');
         setShouldFetch(true);
         await fetchContextDetail();
         return true;
@@ -47,7 +55,7 @@ export const useContextDetail = (contextId) => {
     } catch (err) {
       console.error(err);
       const errorMessage = `Failed to upload document: ${err.detail || 'Unknown error'}`;
-      showNotification(errorMessage, 'error');
+      showUploadNotification('failed', errorMessage);
       return false;
     } finally {
       setIsOperationLoading(false);
@@ -55,11 +63,12 @@ export const useContextDetail = (contextId) => {
   };
 
   const uploadDocumentText = async (data) => {
+    console.log("uploadDocumentText")
     try {
       setIsOperationLoading(true);
       const response = await uploadTextDocumentToContext(contextId, data);
       if (response.status===200) {
-        showNotification('Document uploaded successfully', 'success');
+        showUploadNotification('success');
         setShouldFetch(true);
         await fetchContextDetail();
         return true;
@@ -67,7 +76,7 @@ export const useContextDetail = (contextId) => {
       return false;
     } catch (err) {
       const errorMessage = `Failed to upload document: ${err.message || 'Unknown error'}`;
-      showNotification(errorMessage);
+      showUploadNotification('failed', errorMessage);
       return false;
     } finally {
       setIsOperationLoading(false);

@@ -15,16 +15,18 @@ const DocumentItem = ({ document, onDelete, onDownload, icon }) => {
 
   return (
     <div className="flex justify-between items-center bg-white rounded-lg shadow-sm p-4 mb-3 hover:bg-gray-50">
-      <div className="flex items-center">
-      <img src={icon} alt="Document Icon" className="w-6 h-6 mr-3" />
-        <div>
-          <h4 className="font-medium text-gray-800">{document.filename}</h4>
+      <div className="flex items-center flex-grow min-w-0 mr-4">
+        <img src={icon} alt="Document Icon" className="w-6 h-6 mr-3 flex-shrink-0" />
+        <div className="min-w-0">
+          <h4 className="font-medium text-gray-800 truncate" title={document.filename}>
+            {document.filename}
+          </h4>
           <div className={`inline-flex items-center mt-1 px-2 py-1 rounded-full text-xs font-medium ${bg} ${text}`}>
             {document.upload_status || 'IN_QUEUE'}
           </div>
         </div>
       </div>
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 flex-shrink-0">
         <button 
           onClick={() => onDownload(document.context_id, document.id)}
           className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors relative group"

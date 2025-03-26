@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { deleteContext } from '../../services/api';
@@ -8,6 +8,8 @@ const ContextItem = ({ context, onDelete }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [confirmInput, setConfirmInput] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
 
   const formattedDate = context.created_at 
     ? formatDistanceToNow(new Date(context.created_at), { addSuffix: true })
@@ -33,43 +35,75 @@ const ContextItem = ({ context, onDelete }) => {
     }
   };
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-4 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800">{context.name}</h3>
-          <p className="text-gray-600 mb-2">{context.description}</p>
+        <div className="flex-1 min-w-0 mr-3">
+          <h3 className="text-lg font-semibold text-gray-800 truncate">{context.name}</h3>
+          <p className="text-gray-600 mb-2 line-clamp-2 overflow-hidden text-ellipsis" title={context.description}>
+            {context.description}
+          </p>
           <p className="text-sm text-gray-500">Created {formattedDate}</p>
         </div>
-        <div className="flex space-x-2 items-center">
+        <div className="flex items-center space-x-2 md:space-x-3 flex-shrink-0">
           <Link 
             to={`/chat?contextId=${context.id}`}
-            className="p-3 text-green-600 hover:bg-green-50 rounded-md transition-colors relative group"
+            className="p-2 md:p-3 text-green-600 hover:bg-green-50 rounded-md transition-colors relative group"
             aria-label="Chat with this context"
           >
-            <img src={chatIcon} alt="Chat" width="24" height="24" />
+            <img src={chatIcon} alt="Chat" className="w-5 h-5 md:w-6 md:h-6" />
             <span className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
               Chat with this context
             </span>
           </Link>
-          <Link 
-            to={`/contexts/${context.id}`}
-            className="px-3 py-1.5 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 text-sm flex items-center"
-          >
-            View Details
-          </Link>
-          <button
-            onClick={() => setShowDeleteConfirm(true)}
-            className="p-2 text-red-500 hover:bg-red-50 rounded-md transition-colors"
-            aria-label="Delete context"
-          >
-            {/* Simple trash icon SVG */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 6h18"></path>
-              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-            </svg>
-          </button>
+          
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              className="p-2 md:p-2.5 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+              aria-label="More options"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="12" cy="5" r="1"></circle>
+                <circle cx="12" cy="19" r="1"></circle>
+              </svg>
+            </button>
+            
+            {showMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 py-1">
+                <Link 
+                  to={`/contexts/${context.id}`}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                >
+                  View Details
+                </Link>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    setShowDeleteConfirm(true);
+                  }}
+                  className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
