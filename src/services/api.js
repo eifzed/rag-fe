@@ -61,7 +61,7 @@ export const createContext = async (name, description) => {
 export const uploadDocumentToContext = async (contextId, file) => {
   try {
     const formData = new FormData();
-    formData.append("files", file);
+    formData.append("file", file);
 
     const response = await api.post(
       `/contexts/${contextId}/documents`,
@@ -185,12 +185,14 @@ export const scrapeUrl = async (url) => {
 };
 
 export const uploadTextDocumentToContext = async (contextId, data) => {
-  const response = await api.post(`/contexts/${contextId}/text`, data);
-  if (response.status !== 200) {
-    throw new Error(response.data.message || "Failed to add text document");
+  try {
+    const response = await api.post(`/contexts/${contextId}/text`, data);
+    return response.data
+  } catch(error) {
+    console.error('failed to upload document:', error);
+    throw error;
   }
-
-  return response.data;
+  
 };
 
 export default api;
