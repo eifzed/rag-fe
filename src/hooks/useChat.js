@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect } from 'react';
 import { sendChatMessage } from '../services/api';
 import { useNotification } from '../contexts/NotificationContext';
 
+
+MAX_HISTORY_LENGTH = process.env.MAX_HISTORY_LENGTH || 10;
 export const useChat = (initialContextId = null) => {
   const [contextId, setContextId] = useState(initialContextId);
   const [messages, setMessages] = useState([]);
