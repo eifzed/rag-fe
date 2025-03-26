@@ -13,6 +13,7 @@ import csvIcon from "../../assets/csv-file.png";
 import otherIcon from "../../assets/google-docs.png";
 
 const MAX_DOCUMENTS = Number(process.env.REACT_APP_MAX_DOCUMENTS) || 5;
+const MAX_DOCUMENT_SIZE_MB = Number(process.env.MAX_DOCUMENT_SIZE_MB) || 5;
 
 const DocumentList = ({ documents = [], onUpload, onDelete, isUploading }) => {
   const [fileToDelete, setFileToDelete] = useState(null);
@@ -105,9 +106,8 @@ const DocumentList = ({ documents = [], onUpload, onDelete, isUploading }) => {
               </button>
               {showTooltip && (
                 <div className="absolute z-10 w-64 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 bottom-full left-1/2 transform -translate-x-1/2 -translate-y-2">
-                  Upload up to {MAX_DOCUMENTS} documents to be integrated with
-                  this context. Only documents with status SUCCESS is included
-                  in the chat
+                  Upload up to {MAX_DOCUMENTS} Documents with each max size of {MAX_DOCUMENT_SIZE_MB}MB to be integrated with
+                  this context. Only documents with status SUCCESS is included in the chat
                   <div className="tooltip-arrow" data-popper-arrow></div>
                 </div>
               )}

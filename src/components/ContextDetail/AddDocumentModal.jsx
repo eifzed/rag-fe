@@ -121,7 +121,7 @@ const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
             </Button>
             <input
               type="file"
-              accept='.pdf,.csv,.doc,.txt,.md'
+              accept='.pdf,.txt,.md'
               id="modalFileInput"
               className="hidden"
               onChange={handleFileUpload}
