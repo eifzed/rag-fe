@@ -75,8 +75,8 @@ export const uploadDocumentToContext = async (contextId, file) => {
 
 export const deleteDocumentFromContext = async (contextId, fileId) => {
   try {
-    await api.delete(`/contexts/${contextId}/documents/${fileId}`);
-    return true;
+    const response = await api.delete(`/contexts/${contextId}/documents/${fileId}`);
+    return response;
   } catch (error) {
     console.error(
       `Error deleting document ${fileId} from context ${contextId}:`,
