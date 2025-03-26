@@ -39,6 +39,7 @@ export const useContextDetail = (contextId) => {
       const response =  await uploadDocumentToContext(contextId, file);
       if (response.status===200) {
         showNotification('Document uploaded successfully', 'success');
+        setShouldFetch(true);
         await fetchContextDetail();
         return true;
       }
@@ -59,6 +60,7 @@ export const useContextDetail = (contextId) => {
       const response = await uploadTextDocumentToContext(contextId, data);
       if (response.status===200) {
         showNotification('Document uploaded successfully', 'success');
+        setShouldFetch(true);
         await fetchContextDetail();
         return true;
       }
@@ -78,6 +80,7 @@ export const useContextDetail = (contextId) => {
       const response = await deleteDocumentFromContext(contextId, fileId);
       if (response.status === 200) {
         showNotification('Document deleted successfully', 'success');
+        setShouldFetch(true);
         await fetchContextDetail();
         return true;
       }
