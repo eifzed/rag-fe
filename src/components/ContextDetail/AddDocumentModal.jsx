@@ -13,8 +13,17 @@ const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
   const [showUrlScraper, setShowUrlScraper] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const { showNotification } = useNotification();
+  
+  // Character limit constant
+  const CONTENT_CHAR_LIMIT = process.env.CONTENT_CHAR_LIMIT || 50000;
 
   if (!isOpen) return null;
+
+  // Check if content exceeds character limit
+  const isContentOverLimit = content.length > CONTENT_CHAR_LIMIT;
+
+  // Calculate remaining characters
+  const remainingChars = CONTENT_CHAR_LIMIT - content.length;
 
   const handleFileUpload = async(e) => {
     if (e.target.files && e.target.files[0]) {
@@ -60,6 +69,11 @@ const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
   const handleUploadText = async () => {
     if (!name || !content) {
       showNotification('Please provide both name and content');
+      return;
+    }
+
+    if (isContentOverLimit) {
+      showNotification(`Content exceeds the ${CONTENT_CHAR_LIMIT} character limit`);
       return;
     }
 
@@ -199,20 +213,32 @@ const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Enter or paste content here"
-                rows={8}
-                className="w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500"
-              />
+              <div className="relative">
+                <textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  placeholder="Enter or paste content here"
+                  rows={8}
+                  className={`w-full p-2 border rounded focus:ring-blue-500 focus:border-blue-500 ${isContentOverLimit ? 'border-red-500' : ''}`}
+                />
+                {content.length > 0 && (
+                  <div className={`text-sm mt-1 flex justify-end ${isContentOverLimit ? 'text-red-500 font-medium' : 'text-gray-500'}`}>
+                    {remainingChars} characters remaining
+                  </div>
+                )}
+                {isContentOverLimit && (
+                  <div className="text-sm text-red-500 mt-1">
+                    Content exceeds maximum character limit
+                  </div>
+                )}
+              </div>
             </div>
             
             <div className="flex justify-end pt-2">
               <Button
                 onClick={handleUploadText}
                 variant="primary"
-                disabled={isUploading || isScraping}
+                disabled={isUploading || isScraping || isContentOverLimit || !name || !content}
               >
                 {isUploading ? 'Uploading...' : 'Upload'}
               </Button>

@@ -3,7 +3,7 @@ import { sendChatMessage } from '../services/api';
 import { useNotification } from '../contexts/NotificationContext';
 
 
-MAX_HISTORY_LENGTH = process.env.MAX_HISTORY_LENGTH || 10;
+const MAX_HISTORY_LENGTH = process.env.MAX_HISTORY_LENGTH || 10;
 export const useChat = (initialContextId = null) => {
   const [contextId, setContextId] = useState(initialContextId);
   const [messages, setMessages] = useState([]);
@@ -73,7 +73,7 @@ export const useChat = (initialContextId = null) => {
       setMessages(prev => [...prev, userMessage]);
       
       // Get only the last 6 messages (or all if less than 6)
-      const lastMessages = [...messages, userMessage].slice(-6);
+      const lastMessages = [...messages, userMessage].slice(-MAX_HISTORY_LENGTH);
       
       // Format history for API
       const history = lastMessages.map(msg => ({
