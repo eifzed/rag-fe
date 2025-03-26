@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../UI/Button';
 import { scrapeUrl } from '../../services/api';
+import { useNotification } from '../../contexts/NotificationContext';
 
 const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
   const [activeTab, setActiveTab] = useState('file');
@@ -9,27 +10,36 @@ const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
   const [content, setContent] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [isScraping, setIsScraping] = useState(false);
-  const [error, setError] = useState('');
   const [showUrlScraper, setShowUrlScraper] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const { showNotification } = useNotification();
 
   if (!isOpen) return null;
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async(e) => {
     if (e.target.files && e.target.files[0]) {
-        onUpload(e.target.files[0], null);
-        onClose(true);
+      setIsUploading(true);
+      try {
+        const success = await onUpload(e.target.files[0], null);
+        if (success) {
+          onClose(true);
+        }
+      } catch (err) {
+        showNotification('Failed to upload file:'+ (err.message || 'Unknown error'));
+        
+      }finally {
+        setIsUploading(false);
+      }
     }
   };
 
   const handleScrapeUrl = async () => {
     if (!url) {
-      setError('Please enter a URL');
+      showNotification('Please enter a URL');
       return;
     }
 
     setIsScraping(true);
-    setError('');
     
     try {
       const response = await scrapeUrl(url);
@@ -41,7 +51,7 @@ const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
         setContent(prev => prev ? prev + "\n" + content : content);
       }
     } catch (err) {
-      setError('Failed to scrape URL: ' + (err.message || 'Unknown error'));
+      showNotification('Failed to scrape URL: ' + (err.message || 'Unknown error'));
     } finally {
       setIsScraping(false);
     }
@@ -49,22 +59,23 @@ const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
 
   const handleUploadText = async () => {
     if (!name || !content) {
-      setError('Please provide both name and content');
+      showNotification('Please provide both name and content');
       return;
     }
 
     setIsUploading(true);
-    setError('');
     
     try {
-        await onUpload(null, {
+        const success = await onUpload(null, {
             filename: name,
             content_type: "text/url-scrape",
             content: content
-        })
-      onClose(true);
+        });
+        if (success) {
+            onClose(true);
+        }
     } catch (err) {
-      setError('Failed to add document: ' + (err.message || 'Unknown error'));
+      showNotification('Failed to add document: ' + (err.message || 'Unknown error'));
     } finally {
       setIsUploading(false);
     }
@@ -98,12 +109,6 @@ const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
             Text Input
           </button>
         </div>
-
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
-            {error}
-          </div>
-        )}
 
         {activeTab === 'file' ? (
           <div className="text-center py-8">

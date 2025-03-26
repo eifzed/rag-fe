@@ -7,6 +7,7 @@ import ContextSidebar from "./ContextSidebar";
 import { useChat } from "../../hooks/useChat";
 import { getContextById } from "../../services/api";
 import { ErrorBoundary } from "react-error-boundary";
+import { useNotification } from "../../contexts/NotificationContext";
 
 const ChatWindow = ({ initialContextId }) => {
   const location = useLocation();
@@ -55,10 +56,8 @@ const ChatWindow = ({ initialContextId }) => {
     const urlContextId = getContextIdFromUrl();
 
     if (initialContextId && initialContextId !== urlContextId) {
-      // If prop is provided, it takes precedence
       updateUrlWithContextId(initialContextId);
     } else if (urlContextId && !contextId) {
-      // If URL has context ID but hook doesn't, sync hook with URL
       selectContext(urlContextId);
     }
   }, [initialContextId, contextId, getContextIdFromUrl, selectContext, updateUrlWithContextId]);
@@ -80,11 +79,12 @@ const ChatWindow = ({ initialContextId }) => {
   // Focus input when loading state changes from true to false
   useEffect(() => {
     if (!loading && messages.length > 0 && inputRef.current) {
-      // Focus the input after receiving a response
       inputRef.current.focus();
     }
   }, [loading, messages]);
 
+  const { showNotification } = useNotification();
+  
   // Fetch context details from API
   const fetchContextDetails = async (id) => {
     try {
@@ -97,6 +97,7 @@ const ChatWindow = ({ initialContextId }) => {
       }
     } catch (error) {
       console.error("Failed to fetch context details:", error);
+      showNotification(`Failed to fetch context details: ${error.message || 'Unknown error'}`, 'error');
     }
   };
 
@@ -104,6 +105,7 @@ const ChatWindow = ({ initialContextId }) => {
   const handleContextSelect = (id) => {
     selectContext(id);
     updateUrlWithContextId(id);
+    showNotification(`Context "${id}" selected`, 'success');
     // Close sidebar on mobile after selection
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
@@ -113,11 +115,6 @@ const ChatWindow = ({ initialContextId }) => {
   // Handle chat reset with URL update
   const handleResetChat = () => {
     resetChat();
-    // Optionally keep the context in URL when resetting chat
-    // If you want to clear context on reset, uncomment:
-    // updateUrlWithContextId(null);
-
-    // Focus on input after reset
     if (inputRef.current) {
       setTimeout(() => inputRef.current.focus(), 0);
     }

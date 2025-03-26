@@ -12,7 +12,6 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-    console.log("token", token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -67,7 +66,7 @@ export const uploadDocumentToContext = async (contextId, file) => {
       `/contexts/${contextId}/documents`,
       formData
     );
-    return response.data;
+    return response;
   } catch (error) {
     console.error(`Error uploading document to context ${contextId}:`, error);
     throw error;

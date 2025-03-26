@@ -1,13 +1,20 @@
 import React, { useState, forwardRef } from 'react';
 import Button from '../UI/Button';
+import { useNotification } from '../../contexts/NotificationContext';
 
 const MessageInput = forwardRef(({ onSendMessage, isLoading, disabled }, ref) => {
   const [message, setMessage] = useState('');
+  const { showNotification } = useNotification();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
     if (message.trim() && !isLoading) {
+      if (message.length > 4000) {
+        showNotification('Message is too long. Please keep it under 4000 characters.', 'warning');
+        return;
+      }
+      
       onSendMessage(message);
       setMessage('');
     }

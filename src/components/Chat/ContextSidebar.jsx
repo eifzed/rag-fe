@@ -1,9 +1,11 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { getContexts } from '../../services/api';
+import { useNotification } from '../../contexts/NotificationContext';
 
 const ContextSidebar = ({ isOpen, contextId, onSelectContext }) => {
   const [contextList, setContextList] = useState([]);
+  const { showNotification } = useNotification();
   
   // Fetch all contexts for the sidebar
   useEffect(() => {
@@ -13,11 +15,12 @@ const ContextSidebar = ({ isOpen, contextId, onSelectContext }) => {
         setContextList(contexts);
       } catch (error) {
         console.error("Failed to fetch contexts:", error);
+        showNotification(`Failed to load contexts: ${error.message || 'Unknown error'}`, 'error');
       }
     };
     
     fetchContexts();
-  }, []);
+  }, [showNotification]);
 
   return (
     <div className={`bg-gray-100 border-r border-gray-200 transition-all duration-300 ${

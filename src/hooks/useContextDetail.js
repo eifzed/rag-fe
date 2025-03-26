@@ -1,12 +1,14 @@
 // src/hooks/useContextDetail.js
 import { useState, useEffect, useCallback } from 'react';
 import { getContextById, uploadDocumentToContext, deleteDocumentFromContext, uploadTextDocumentToContext } from '../services/api';
+import { useNotification } from '../contexts/NotificationContext';
 
 export const useContextDetail = (contextId) => {
   const [context, setContext] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [isOperationLoading, setIsOperationLoading] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(true);
+  const { showNotification } = useNotification();
 
   const fetchContextDetail = useCallback(async () => {
     if (!contextId) return;
@@ -15,27 +17,36 @@ export const useContextDetail = (contextId) => {
       setLoading(true);
       const data = await getContextById(contextId);
       setContext(data);
-      setError(null);
     } catch (err) {
-      setError(`Failed to fetch context details: ${err.message || 'Unknown error'}`);
+      const errorMessage = `Failed to fetch context details: ${err.message || 'Unknown error'}`;
+      showNotification(errorMessage);
       console.error(err);
     } finally {
       setLoading(false);
     }
-  }, [contextId]);
+  }, [contextId, showNotification]);
 
   useEffect(() => {
-    fetchContextDetail();
-  }, [fetchContextDetail]);
+    if (shouldFetch) {
+      fetchContextDetail();
+      setShouldFetch(false);
+    }
+  }, [fetchContextDetail, shouldFetch]);
 
   const uploadDocument = async (file) => {
     try {
       setIsOperationLoading(true);
-      await uploadDocumentToContext(contextId, file);
-      await fetchContextDetail();
-      return true;
+      const response =  await uploadDocumentToContext(contextId, file);
+      if (response.status===200) {
+        showNotification('Document uploaded successfully', 'success');
+        await fetchContextDetail();
+        return true;
+      }
+      return false;
     } catch (err) {
-      setError(`Failed to upload document: ${err.message || 'Unknown error'}`);
+      console.error(err);
+      const errorMessage = `Failed to upload document: ${err.detail || 'Unknown error'}`;
+      showNotification(errorMessage, 'error');
       return false;
     } finally {
       setIsOperationLoading(false);
@@ -45,11 +56,16 @@ export const useContextDetail = (contextId) => {
   const uploadDocumentText = async (data) => {
     try {
       setIsOperationLoading(true);
-      await uploadTextDocumentToContext(contextId, data);
-      await fetchContextDetail();
-      return true;
+      const response = await uploadTextDocumentToContext(contextId, data);
+      if (response.status===200) {
+        showNotification('Document uploaded successfully', 'success');
+        await fetchContextDetail();
+        return true;
+      }
+      return false;
     } catch (err) {
-      setError(`Failed to upload document: ${err.message || 'Unknown error'}`);
+      const errorMessage = `Failed to upload document: ${err.message || 'Unknown error'}`;
+      showNotification(errorMessage);
       return false;
     } finally {
       setIsOperationLoading(false);
@@ -59,11 +75,16 @@ export const useContextDetail = (contextId) => {
   const deleteDocument = async (fileId) => {
     try {
       setIsOperationLoading(true);
-      await deleteDocumentFromContext(contextId, fileId);
-      await fetchContextDetail();
-      return true;
+      const response = await deleteDocumentFromContext(contextId, fileId);
+      if (response.status === 200) {
+        showNotification('Document deleted successfully', 'success');
+        await fetchContextDetail();
+        return true;
+      }
+      return false;
     } catch (err) {
-      setError(`Failed to delete document: ${err.message || 'Unknown error'}`);
+      const errorMessage = `Failed to delete document: ${err.message || 'Unknown error'}`;
+      showNotification(errorMessage);
       return false;
     } finally {
       setIsOperationLoading(false);
@@ -73,7 +94,6 @@ export const useContextDetail = (contextId) => {
   return { 
     context, 
     loading, 
-    error, 
     isOperationLoading,
     fetchContextDetail, 
     uploadDocument, 

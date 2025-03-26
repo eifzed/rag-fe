@@ -4,6 +4,7 @@ import Button from '../UI/Button';
 import ContextSelector from './ContextSelector';
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'react-feather';
+import { useNotification } from '../../contexts/NotificationContext';
 
 
 
@@ -18,6 +19,13 @@ const ChatHeader = ({
   messages,
   error 
 }) => {
+  const { showNotification } = useNotification();
+  
+  const handleClearChat = () => {
+    handleResetChat();
+    showNotification('Chat history cleared', 'success');
+  };
+
   return (
     <div className="bg-white border-b p-4">
       <div className="flex justify-between items-start">
@@ -52,7 +60,7 @@ const ChatHeader = ({
         </div>
         <div className="flex items-center space-x-3">
           {messages.length > 0 && (
-            <Button onClick={handleResetChat} variant="secondary" size="sm">
+            <Button onClick={handleClearChat} variant="secondary" size="sm">
               Clear Chat
             </Button>
           )}

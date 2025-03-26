@@ -5,7 +5,7 @@ import Navbar from './components/UI/Navbar';
 import axios from 'axios';
 import { checkAuthStatus } from './utils/auth';
 import { removeAuth } from './utils/auth';
-
+import { NotificationProvider } from './contexts/NotificationContext';
 
 function App() {
   const navigate = useNavigate();
@@ -70,13 +70,15 @@ function App() {
 
   // Add auth context to make authentication state available to all components
   return (
-    <div className="flex flex-col h-screen">
-      <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={handleAuthChange} />
-      <main className="flex-1 bg-gray-50 overflow-y-auto">
-        {/* Pass auth state and setter to all child routes */}
-        <Outlet context={{ isAuthenticated, setIsAuthenticated: handleAuthChange }} />
-      </main>
-    </div>
+    <NotificationProvider>
+      <div className="flex flex-col h-screen">
+        <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={handleAuthChange} />
+        <main className="flex-1 bg-gray-50 overflow-y-auto">
+          {/* Pass auth state and setter to all child routes */}
+          <Outlet context={{ isAuthenticated, setIsAuthenticated: handleAuthChange }} />
+        </main>
+      </div>
+    </NotificationProvider>
   );
 }
 

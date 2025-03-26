@@ -1,23 +1,23 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useContextDetail } from '../../hooks/useContextDetail';
 import DocumentList from './DocumentList';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import { formatDistanceToNow } from 'date-fns';
 import chatIcon from '../../assets/new_chat_button.png';
+import { useNotification } from '../../contexts/NotificationContext';
 
 const ContextDetail = ({ contextId }) => {
   const { 
     context, 
     loading, 
-    error, 
     isOperationLoading,
     uploadDocument, 
     uploadDocumentText,
     deleteDocument 
   } = useContextDetail(contextId);
   
-  const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const handleUpload = async (file, data) => {
     try {
@@ -27,7 +27,7 @@ const ContextDetail = ({ contextId }) => {
         await uploadDocumentText(data);
       }
     } catch (err) {
-      // Error is already handled in the hook
+      showNotification('An error occurred while uploading the document');
       console.error('Upload error:', err);
     }
   };
@@ -36,7 +36,7 @@ const ContextDetail = ({ contextId }) => {
     try {
       await deleteDocument(fileId);
     } catch (err) {
-      // Error is already handled in the hook
+      showNotification('An error occurred while deleting the document');
       console.error('Delete error:', err);
     }
   };
@@ -45,20 +45,6 @@ const ContextDetail = ({ contextId }) => {
     return (
       <div className="flex justify-center py-12">
         <LoadingSpinner />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
-        <p>{error}</p>
-        <button 
-          onClick={() => navigate('/contexts')} 
-          className="text-red-700 font-medium mt-2 underline"
-        >
-          Return to Context List
-        </button>
       </div>
     );
   }

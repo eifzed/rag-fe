@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { deleteContext } from '../../services/api';
+import chatIcon from '../../assets/new_chat_button.png';
 
 const ContextItem = ({ context, onDelete }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -40,18 +41,19 @@ const ContextItem = ({ context, onDelete }) => {
           <p className="text-gray-600 mb-2">{context.description}</p>
           <p className="text-sm text-gray-500">Created {formattedDate}</p>
         </div>
-        <div className="flex space-x-2">
-          <Link 
-            to={`/contexts/${context.id}`}
-            className="px-3 py-1 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 text-sm"
-          >
-            View Details
-          </Link>
+        <div className="flex space-x-2 items-center">
           <Link 
             to={`/chat?contextId=${context.id}`}
-            className="px-3 py-1 bg-green-100 text-green-600 rounded-md hover:bg-green-200 text-sm"
+            className="p-3 text-green-600 hover:bg-green-50 rounded-md transition-colors"
+            aria-label="Chat with this context"
           >
-            Chat
+            <img src={chatIcon} alt="Chat" width="24" height="24" />
+          </Link>
+          <Link 
+            to={`/contexts/${context.id}`}
+            className="px-3 py-1.5 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 text-sm flex items-center"
+          >
+            View Details
           </Link>
           <button
             onClick={() => setShowDeleteConfirm(true)}
