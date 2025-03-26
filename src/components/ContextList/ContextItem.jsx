@@ -44,10 +44,13 @@ const ContextItem = ({ context, onDelete }) => {
         <div className="flex space-x-2 items-center">
           <Link 
             to={`/chat?contextId=${context.id}`}
-            className="p-3 text-green-600 hover:bg-green-50 rounded-md transition-colors"
+            className="p-3 text-green-600 hover:bg-green-50 rounded-md transition-colors relative group"
             aria-label="Chat with this context"
           >
             <img src={chatIcon} alt="Chat" width="24" height="24" />
+            <span className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+              Chat with this context
+            </span>
           </Link>
           <Link 
             to={`/contexts/${context.id}`}
