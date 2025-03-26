@@ -223,7 +223,7 @@ export const scrapeUrl = async (url) => {
 export const uploadTextDocumentToContext = async (contextId, data) => {
   try {
     const response = await api.post(`/contexts/${contextId}/text`, data);
-    return response.data
+    return response
   } catch(error) {
     console.error('failed to upload document:', error);
     if (error.response && error.response.data && error.response.data.detail) {

@@ -53,7 +53,6 @@ export const useContextDetail = (contextId) => {
       }
       return false;
     } catch (err) {
-      console.error(err);
       const errorMessage = `Failed to upload document: ${err.detail || 'Unknown error'}`;
       showUploadNotification('failed', errorMessage);
       return false;

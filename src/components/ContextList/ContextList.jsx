@@ -53,52 +53,65 @@ const ContextList = () => {
         <h2 className="text-2xl font-bold text-gray-800">Knowledge Contexts</h2>
       </div>
 
-      <div className="container mx-auto p-4 flex items-center justify-between">
-        <SearchBar
-          value={searchTerm}
-          onChange={handleSearch}
-          onSearch={fetchContexts}
-          placeholder="Search contexts..."
-        />
-
-        <div className="relative flex flex-col items-center group">
+      {!loading && !error && contexts.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16">
+          <p className="text-gray-500 mb-8 text-center">No contexts found. Create a new one to get started.</p>
           <div
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full hover:bg-gray-200 cursor-pointer shadow-md transition-transform transform hover:scale-110"
+            className="flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full hover:bg-gray-200 cursor-pointer shadow-md transition-transform transform hover:scale-110"
           >
-            <img src={plusIcon} alt="Plus Icon" className="w-9 h-9" />
+            <img src={plusIcon} alt="Create New Context" className="w-16 h-16" />
           </div>
-          <span className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 px-3 py-1 text-sm text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap w-30 text-center">
-            Create New Context
-          </span>
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="flex justify-center py-12">
-          <LoadingSpinner />
-        </div>
-      ) : error ? (
-        <div
-          className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
-          role="alert"
-        >
-          <p>{error}</p>
-        </div>
-      ) : contexts.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">
-          <p>No contexts found. Create a new one to get started.</p>
+          <p className="mt-4 text-gray-600 font-medium">Create New Context</p>
         </div>
       ) : (
-        <div className="mt-6">
-          {contexts.map((context) => (
-            <ContextItem
-              key={context.id}
-              context={context}
-              onDelete={fetchContexts}
-            />
-          ))}
-        </div>
+        <>
+          <div className="container mx-auto p-4 flex flex-col sm:flex-row items-center gap-4 sm:justify-between">
+            <div className="w-full sm:w-auto sm:flex-grow sm:max-w-md">
+              <SearchBar
+                value={searchTerm}
+                onChange={handleSearch}
+                onSearch={fetchContexts}
+                placeholder="Search contexts..."
+              />
+            </div>
+
+            <div className="relative flex flex-col items-center group">
+              <div
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full hover:bg-gray-200 cursor-pointer shadow-md transition-transform transform hover:scale-110"
+              >
+                <img src={plusIcon} alt="Plus Icon" className="w-9 h-9" />
+              </div>
+              <span className="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-2 px-3 py-1 text-sm text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap w-30 text-center">
+                Create New Context
+              </span>
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <LoadingSpinner />
+            </div>
+          ) : error ? (
+            <div
+              className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
+              role="alert"
+            >
+              <p>{error}</p>
+            </div>
+          ) : (
+            <div className="mt-6">
+              {contexts.map((context) => (
+                <ContextItem
+                  key={context.id}
+                  context={context}
+                  onDelete={fetchContexts}
+                />
+              ))}
+            </div>
+          )}
+        </>
       )}
 
       <Modal
