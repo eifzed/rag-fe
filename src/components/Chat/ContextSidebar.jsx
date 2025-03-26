@@ -15,7 +15,7 @@ const ContextSidebar = ({ isOpen, contextId, onSelectContext }) => {
         setContextList(contexts);
       } catch (error) {
         console.error("Failed to fetch contexts:", error);
-        showNotification(`Failed to load contexts: ${error.message || 'Unknown error'}`, 'error');
+        showNotification(`Failed to load contexts: ${error.detail || 'Unknown error'}`, 'error');
       }
     };
     

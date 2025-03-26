@@ -25,7 +25,7 @@ const AddDocumentModal = ({ isOpen, onClose, onUpload }) => {
           onClose(true);
         }
       } catch (err) {
-        showNotification('Failed to upload file:'+ (err.message || 'Unknown error'));
+        showNotification('Failed to upload file:'+ (err.detail || 'Unknown error'));
         
       }finally {
         setIsUploading(false);

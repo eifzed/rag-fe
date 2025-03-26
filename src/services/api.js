@@ -19,6 +19,7 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    
     return Promise.reject(error);
   }
 );
@@ -30,6 +31,9 @@ export const getContexts = async (searchTerm = "") => {
     return response.data;
   } catch (error) {
     console.error("Error fetching contexts:", error);
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
     throw error;
   }
 };
@@ -40,6 +44,9 @@ export const getContextById = async (contextId) => {
     return response.data;
   } catch (error) {
     console.error(`Error fetching context ${contextId}:`, error);
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
     throw error;
   }
 };
@@ -53,6 +60,11 @@ export const createContext = async (name, description) => {
     return response.data;
   } catch (error) {
     console.error("Error creating context:", error);
+    
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
+    
     throw error;
   }
 };
@@ -69,6 +81,9 @@ export const uploadDocumentToContext = async (contextId, file) => {
     return response;
   } catch (error) {
     console.error(`Error uploading document to context ${contextId}:`, error);
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
     throw error;
   }
 };
@@ -82,6 +97,9 @@ export const deleteDocumentFromContext = async (contextId, fileId) => {
       `Error deleting document ${fileId} from context ${contextId}:`,
       error
     );
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
     throw error;
   }
 };
@@ -91,6 +109,9 @@ export const deleteContext = async (contextId) => {
     await api.delete(`/contexts/${contextId}`);
     return true;
   } catch (error) {
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
     console.error(`Error deleting context ${contextId}:`, error);
     throw error;
   }
@@ -106,6 +127,9 @@ export const sendChatMessage = async (contextId, message, history = []) => {
     return response.data;
   } catch (error) {
     console.error("Error sending chat message:", error);
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
     throw error;
   }
 };
@@ -120,6 +144,9 @@ export const signup = async (email, password, avatar_url) => {
     return response;
   } catch (error) {
     console.error("Error signup:", error);
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
     throw error;
   }
 };
@@ -134,6 +161,9 @@ export const login = async (email, password) => {
     return response;
   } catch (error) {
     console.error("Error login:", error);
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
     throw error;
   }
 };
@@ -168,19 +198,26 @@ export const downloadDocument = async (contextId, fileId) => {
     URL.revokeObjectURL(blobUrl); // Cleanup
   } catch (error) {
     console.error("Download Error", error);
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
+    throw error;
   }
 };
 
 export const scrapeUrl = async (url) => {
-  const response = await api.post("/scrape", {
-    url,
-  });
-
-  if (response.status !== 200) {
-    throw new Error(response.data.message || "Failed to scrape URL");
+  try {
+    const response = await api.post("/scrape", {
+      url,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error scraping URL:", error);
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
+    throw error;
   }
-
-  return response.data;
 };
 
 export const uploadTextDocumentToContext = async (contextId, data) => {
@@ -189,6 +226,9 @@ export const uploadTextDocumentToContext = async (contextId, data) => {
     return response.data
   } catch(error) {
     console.error('failed to upload document:', error);
+    if (error.response && error.response.data && error.response.data.detail) {
+      error.detail = error.response.data.detail;
+    }
     throw error;
   }
   

@@ -97,7 +97,7 @@ const ChatWindow = ({ initialContextId }) => {
       }
     } catch (error) {
       console.error("Failed to fetch context details:", error);
-      showNotification(`Failed to fetch context details: ${error.message || 'Unknown error'}`, 'error');
+      showNotification(`Failed to fetch context details: ${error.detail || 'Unknown error'}`, 'error');
     }
   };
 

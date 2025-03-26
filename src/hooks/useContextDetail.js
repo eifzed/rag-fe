@@ -30,7 +30,7 @@ export const useContextDetail = (contextId) => {
     if (status === 'success') {
       showNotification('Document uploaded. Wait until the status is SUCCESS to include it in the chat','success');
     } else if (status === 'failed') {
-      showNotification('Failed to upload document: '+ errorMessage,'error');
+      showNotification(errorMessage,'error');
     } 
   };
 
@@ -75,7 +75,7 @@ export const useContextDetail = (contextId) => {
       }
       return false;
     } catch (err) {
-      const errorMessage = `Failed to upload document: ${err.message || 'Unknown error'}`;
+      const errorMessage = `Failed to upload document: ${err.detail || 'Unknown error'}`;
       showUploadNotification('failed', errorMessage);
       return false;
     } finally {
